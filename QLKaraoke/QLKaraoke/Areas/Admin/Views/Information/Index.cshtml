@@ -1,0 +1,61 @@
+﻿@using System.Web;
+@using System.Web.Mvc;
+@using PagedList.Mvc;
+@model PagedList.PagedList<QLKaraoke.Models.ThongTin>
+
+@{
+    ViewBag.Title = "Index";
+    Layout = "~/Areas/Admin/Views/Shared/_LayoutAdmin.cshtml";
+}
+
+<div class="pagetitle">
+    <nav>
+        <ol class="breadcrumb">
+            <li class="breadcrumb-item"><a href="/admin/home/index">Home</a></li>
+            <li class="breadcrumb-item">Information</li>
+            <li class="breadcrumb-item active">Index</li>
+        </ol>
+    </nav>
+</div>
+<div class="container-fluid">
+
+    <div class="table-responsive">
+        <table class="table table-bordered table-hover">
+            <thead class="thead-dark">
+                <tr>
+                    <th>STT </th>
+                    <th>Tiêu đề</th>
+                   
+                    <th>Ngày Cập Nhật</th>
+            
+                    <th class="text-center">Actions</th>
+                </tr>
+            </thead>
+            <tbody>
+                @{int stt = 1;}
+                @foreach (var item in Model)
+                {
+                    <tr>
+                        <td>@(stt++)</td>
+                        <td>
+                            @Html.Raw(item.TieuDe.Substring(0, Math.Min(item.TieuDe.Length, 30)))@(item.TieuDe.Length > 30 ? "..." : "")
+                        </td>
+
+                        <td>@item.Ngay.Value.ToString("dd/MM/yyyy")</td>
+                     
+                        <td><a href="@Url.Action("Edit", "Information", new { @id = item.Id })" class="btn btn-sm btn-warning">  <i class="fa fa-pencil-alt"></i></a></td>
+                    </tr>
+                    
+                }
+
+            </tbody>
+        </table>
+    </div>
+</div>
+<div class="product__pagination">
+    Trang @(Model.PageCount < Model.PageNumber ? 0 : Model.PageNumber)/@Model.PageCount
+    <div class="MenuTrang">
+        @Html.PagedListPager(Model, page => Url.Action("Index", new { page = page }))
+    </div>
+
+</div>

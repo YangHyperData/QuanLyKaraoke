@@ -1,0 +1,141 @@
+﻿@model QLKaraoke.Models.SuDungDichVu
+
+@{
+    ViewBag.Title = "Details";
+    Layout = "~/Areas/Admin/Views/Shared/_LayoutAdmin.cshtml";
+}
+
+
+
+<div class="container">
+    <div class="row">
+        <div class="col-md-6">
+            <div class="card">
+                <div class="card-header">
+                    <h4 class="card-title">Dịch Vụ Sử Dụng-@Model.DichVu1.Ten</h4>
+                </div>
+                <div class="card-body">
+                    <dl class="dl-horizontal">
+                        <dt>
+                            Tên Dịch Vụ:
+                        </dt>
+                        <dd>
+                            @Html.DisplayFor(model => model.Ten)
+                        </dd>
+
+                        <dt>
+                            Số Lượng:
+                        </dt>
+
+                        <dd>
+                            @Html.DisplayFor(model => model.SoLuong)
+                        </dd>
+
+                        <dt>
+                            Gía 1 sản phẩm:
+                        </dt>
+
+                        <dd>
+                            @string.Format("{0:0,0} đ", Model.Gia)
+                        </dd>
+                        <dt>
+                            Tổng Gía:
+                        </dt>
+
+                        <dd>
+                            @string.Format("{0:0,0} đ", Model.Gia * Model.SoLuong)
+                        </dd>
+
+                        <dt>
+                            Đơn Vị:
+                        </dt>
+
+                        <dd>
+                            @Html.DisplayFor(model => model.TenDVT)
+                        </dd>
+
+                        <dt>
+                            Loại Dịch Vụ:
+                        </dt>
+
+                        <dd>
+                            @Html.DisplayFor(model => model.TenLoai)
+                        </dd>
+
+                        <dt>
+                            Ngày Sử Dụng:
+                        </dt>
+
+                        <dd>
+                           @Model.NgayTao.Value.ToString("dd/MM/yyyy")
+                        </dd>
+
+                        <dt>
+                            Thời Gian Sử Dụng:
+                        </dt>
+
+                        <dd>
+                            @Html.DisplayFor(model => model.ThoiGianBatDat)- @Html.DisplayFor(model => model.DatPhong.TimeEnd)
+                        </dd>
+
+
+                        <dt>
+                            Trạng Thái:
+                        </dt>
+
+                        <dd>
+                            @if (Model.TrangThai == false)
+                            {
+                                <p style="color:red">Chưa giao</p>
+                            }
+                            else
+                            {
+                                <p style="color:green">Đã giao</p>
+                            }
+                        </dd>
+
+                        <dt>
+                            Tên Khách Hàng:
+                        </dt>
+
+                        <dd>
+                            @Html.DisplayFor(model => model.KhachHangg.Name)
+                        </dd>
+
+                        <dt>
+                            Phòng:
+                        </dt>
+
+                        <dd>
+                            @Html.DisplayFor(model => model.DatPhong.TenPhong)
+                        </dd>
+                        <dt>
+                            Mã Đặt Phòng:
+                        </dt>
+
+                        <dd>
+                            @Html.DisplayFor(model => model.DatPhong.MaDat)
+                        </dd>
+
+
+                    </dl>
+                </div>
+                <div class="card-footer">
+                    <p>
+                       
+                        @Html.ActionLink("Hoàn thành xem", "Index1", new { }, new { @class = "btn btn-secondary" })
+                    </p>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<style>
+    .container {
+      
+       margin-left:10%;
+        align-items: center;
+        
+    }
+
+</style>

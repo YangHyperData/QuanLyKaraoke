@@ -1,0 +1,188 @@
+﻿@model QLKaraoke.Models.DatPhong
+
+@{
+    ViewBag.Title = "Create";
+    Layout = "~/Areas/Admin/Views/Shared/_LayoutAdmin.cshtml";
+}
+
+@using (Html.BeginForm())
+{
+    @Html.AntiForgeryToken()
+    @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+    <div class="form-horizontal">
+        <h4>Đặt Phòng</h4>
+        <hr />
+
+        <div class="form-group">
+            @Html.LabelFor(model => model.IdKH, "Chọn Khách Hàng", htmlAttributes: new { @class = "control-label col-md-2" })
+            <div class="col-md-10">
+                @Html.DropDownList("IdKH", null, "-- Chọn khách hàng --", new { @class = "form-control", required = "required" })
+                @Html.ValidationMessageFor(model => model.IdKH, "", new { @class = "text-danger" })
+            </div>
+        </div>
+
+        @if (TempData["Errr"] != null)
+        {
+            <div class="alert alert-danger">@TempData["Errr"]</div>
+        }
+
+        <div class="form-group">
+            @Html.LabelFor(model => model.IdDate, "IdDate", htmlAttributes: new { @class = "control-label col-md-2", style = "display:none;" })
+            <div class="col-md-10">
+                @Html.HiddenFor(model => model.IdDate)
+                @Html.ValidationMessageFor(model => model.IdDate, "", new { @class = "text-danger" })
+            </div>
+        </div>
+
+        <div class="form-group">
+            @Html.LabelFor(model => model.Ngay, "Ngày", htmlAttributes: new { @class = "control-label col-md-2" })
+            <div class="col-md-10">
+                @Html.TextBoxFor(model => model.Ngay, new { @class = "form-control datepicker" })
+                <span id="dayOfWeek"></span>
+                @Html.ValidationMessageFor(model => model.Ngay, "", new { @class = "text-danger" })
+            </div>
+        </div>
+
+        @section Scripts {
+            <script>
+                $(document).ready(function () {
+                    $('.datepicker').datepicker({
+                        dateFormat: 'yy/mm/dd',
+                        autoclose: true,
+                        todayHighlight: true,
+                        language: 'vi',
+                        minDate: 0 // chỉ cho phép chọn ngày từ ngày hiện tại trở đi
+                    }).on('change', function (e) {
+                        displayDayOfWeek(e.target.value);
+                        $("#IdLoai").val("");
+                        $("#IdPhong").val("");
+                        $("#IdTime").val("");
+                    });
+                });
+
+
+                function displayDayOfWeek(value) {
+                    var date = new Date(value);
+                    var daysOfWeek = ['Chủ nhật', 'Thứ hai', 'Thứ ba', 'Thứ tư', 'Thứ năm', 'Thứ sáu', 'Thứ bảy'];
+                    var dayOfWeek = daysOfWeek[date.getDay()];
+                    document.getElementById('dayOfWeek').innerHTML = dayOfWeek;
+
+                    // lưu giá trị thứ vào int IdDate
+                    var hiddenField = document.getElementById('IdDate');
+                    switch (dayOfWeek) {
+                        case 'Chủ nhật':
+                            hiddenField.value = 7;
+                            break;
+                        case 'Thứ hai':
+                            hiddenField.value = 1;
+                            break;
+                        case 'Thứ ba':
+                            hiddenField.value = 2;
+                            break;
+                        case 'Thứ tư':
+                            hiddenField.value = 3;
+                            break;
+                        case 'Thứ năm':
+                            hiddenField.value = 4;
+                            break;
+                        case 'Thứ sáu':
+                            hiddenField.value = 5;
+                            break;
+                        case 'Thứ bảy':
+                            hiddenField.value = 6;
+                            break;
+                    }
+
+                    // lưu giá trị ngày vào model Ngay
+                    var ngayField = document.getElementById('Ngay');
+                    var year = date.getFullYear();
+                    var month = (date.getMonth() + 1).toString().padStart(2, '0');
+                    var day = date.getDate().toString().padStart(2, '0');
+                    ngayField.value = year + '/' + month + '/' + day;
+                }
+            </script>
+        }
+        <div class="form-group">
+            @Html.LabelFor(model => model.IdLoai, "Loại Phòng", htmlAttributes: new { @class = "control-label col-md-2" })
+            <div class="col-md-10">
+                @Html.DropDownList("IdLoai", null, htmlAttributes: new { @class = "form-control" })
+                @Html.ValidationMessageFor(model => model.IdLoai, "", new { @class = "text-danger" })
+            </div>
+        </div>
+
+        <div class="form-group">
+            @Html.LabelFor(model => model.IdPhong, "Tên Phòng", htmlAttributes: new { @class = "control-label col-md-2" })
+            <div class="col-md-10">
+                @Html.DropDownList("IdPhong", null, htmlAttributes: new { @class = "form-control" })
+                @Html.ValidationMessageFor(model => model.IdPhong, "", new { @class = "text-danger" })
+            </div>
+        </div>
+        <script>
+                $(function () {
+                     // Lấy dropdownlist loại phòng
+                    var ddlLoaiPhong = $('#IdLoai');
+
+                    // Lấy dropdownlist tên phòng
+                    var ddlTenPhong = $('#IdPhong');
+
+                    // Bắt sự kiện onchange của dropdownlist loại phòng
+                    ddlLoaiPhong.on('change', function () {
+                        // Lấy giá trị được chọn trong dropdownlist loại phòng
+                    var idLoaiPhong = ddlLoaiPhong.val();
+
+                     // Nếu giá trị được chọn hợp lệ
+                    if (idLoaiPhong !== '') {
+                            // Gọi API để lấy danh sách các phòng tương ứng với loại phòng được chọn
+                    var url = '@Url.Action("GetRoomsByType", "BookTickets")';
+                    $.getJSON(url, { IdLoai: idLoaiPhong }, function (data) {
+                                // Gán danh sách các phòng vào dropdownlist tên phòng
+                    ddlTenPhong.empty();
+                    ddlTenPhong.append($('<option>').val('').text('-- Chọn phòng --'));
+                     $.each(data, function (i, room) {
+                     ddlTenPhong.append($('<option>').val(room.value).text(room.text));
+                });
+            });
+        }
+        else {
+            // Nếu giá trị không hợp lệ, đặt giá trị của dropdownlist tên phòng thành rỗng
+            ddlTenPhong.empty();
+            ddlTenPhong.append($('<option>').val('').text('-- Chọn phòng --'));
+        }
+    });
+                });
+
+        </script>
+
+        <div class="form-group">
+            @Html.LabelFor(model => model.TimeStar, "Thời gian bắt đầu:", htmlAttributes: new { @class = "control-label col-md-4" })
+            <div class="col-md-8">
+                @Html.EditorFor(model => model.TimeStar, new { htmlAttributes = new { @class = "form-control", type = "time" } })
+                @Html.ValidationMessageFor(model => model.TimeStar, "", new { @class = "text-danger" })
+            </div>
+        </div>
+
+        <div class="form-group">
+            @Html.LabelFor(model => model.TimeEnd, "Thời gian kết thúc:", htmlAttributes: new { @class = "control-label col-md-4" })
+            <div class="col-md-8">
+                @Html.EditorFor(model => model.TimeEnd, new { htmlAttributes = new { @class = "form-control", type = "time" } })
+                @Html.ValidationMessageFor(model => model.TimeEnd, "", new { @class = "text-danger" })
+            </div>
+        </div>
+
+        <div class="form-group">
+            @Html.LabelFor(model => model.MaGG, "Mã Giảm Gía", htmlAttributes: new { @class = "control-label col-md-2" })
+            <div class="col-md-10">
+                @Html.EditorFor(model => model.MaGG, new { htmlAttributes = new { @class = "form-control" } })
+                @Html.ValidationMessageFor(model => model.MaGG, "", new { @class = "text-danger" })
+            </div>
+        </div>
+
+        <div class="form-group">
+            <div class="col-md-offset-2 col-md-10">
+                <input type="submit" value="Đặt phòng" class="btn btn-default btn-success" />
+                <a href="@Url.Action("Index")" class="btn btn-danger">Hủy</a>
+            </div>
+        </div>
+
+    </div>
+}

@@ -1,0 +1,90 @@
+﻿@model QLKaraoke.Models.KhoHang
+
+@{
+    ViewBag.Title = "Details";
+    Layout = "~/Areas/Admin/Views/Shared/_LayoutAdmin.cshtml";
+}
+
+<div class="pagetitle">
+    <nav>
+        <ol class="breadcrumb">
+            <li class="breadcrumb-item"><a href="/admin/home/index">Home</a></li>
+            <li class="breadcrumb-item">Depot</li>
+            <li class="breadcrumb-item active">Details</li>
+        </ol>
+    </nav>
+</div>
+
+<div>
+
+    <hr />
+    <dl class="dl-horizontal">
+        <dt>
+            Tên mặt hàng
+        </dt>
+        <dd>
+            @Html.DisplayFor(model => model.TenMatHang)
+        </dd>
+
+        <dt>
+            Đơn giá
+        </dt>
+
+     
+            <dd >@string.Format("{0:0,0} đ", Model.DonGia)</dd>
+       
+
+        <dt>
+            Số lượng
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.SoLuong)
+        </dd>
+
+        <dt>
+            Ngày cập nhật
+        </dt>
+
+        <dd>
+            @Model.NgayCapNhat.Value.ToString("dd/MM/yyyy")
+        </dd>
+
+        <dt>
+            Còn lại
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.ConLai)
+        </dd>
+
+        <dt>
+            Tổng giá
+        </dt>
+
+     
+            <dd >@string.Format("{0:0,0} đ", Model.TongGia)</dd>
+ 
+
+        <dt>
+            Đơn vị tính
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.DonViTinh.TenDonVi)
+        </dd>
+
+        <dt>
+            Loại mặt hàng
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.LoaiDV1.TenDV)
+        </dd>
+
+    </dl>
+</div>
+<p>
+    <a href="@Url.Action("Edit")" class="btn btn-outline-success">Sửa</a>
+    @Html.ActionLink("Quay lại danh sách", "Index")
+</p>

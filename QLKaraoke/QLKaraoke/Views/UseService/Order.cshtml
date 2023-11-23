@@ -1,0 +1,97 @@
+﻿
+@model QLKaraoke.Models.OrderViewModel
+
+@{
+    ViewBag.Title = "Order";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+@if (ViewBag.ErrorMessage != null)
+{
+    <div style="background-color: red; color: white; font-weight: bold;">
+        @ViewBag.ErrorMessage
+    </div>
+}
+<div class="container">
+    <div class="row">
+        <div class="col-lg-12">
+            <h2>Thông tin đặt dịch vụ</h2>
+        </div>
+    </div>
+    @using (Html.BeginForm("Order", "UseService", FormMethod.Post))
+    {
+        <div class="row">
+            <div class="col-lg-6">
+                <h4>Thông tin khách hàng</h4>
+                <p><strong>Họ và tên:</strong> @Model.KhachHang.Name</p>
+                <p><strong>Số điện thoại:</strong> @Model.KhachHang.Phone</p>
+                <p><strong>Email:</strong> @Model.KhachHang.Email</p>
+            </div>
+            <div class="col-lg-6">
+                <h4>Danh sách đặt dịch vụ</h4>
+                @if (Model.ListCart.Count > 0)
+                {
+                    <table class="table table-hover">
+                        <thead>
+                            <tr>
+                                <th>Tên dịch vụ</th>
+                                <th>Số lượng</th>
+
+                                <th>Giá</th>
+                                <th>Tổng tiền</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @foreach (var item in Model.ListCart)
+                            {
+                                <tr>
+                                    <td>@item.Ten</td>
+                                    <td>@item.SoLuong</td>
+
+                                    <td>@string.Format("{0:0,0} đ", item.Gia)</td>
+                                    <td>@string.Format("{0:0,0} đ", (item.SoLuong * item.Gia))</td>
+                                </tr>
+                            }
+                        </tbody>
+                        <tfoot>
+                            <tr>
+                                <td colspan="2" class="shopping-cart-total-label">
+                                    <h2 class="shopping-cart">Tổng cộng:</h2>
+                                </td>
+                                <td class="shopping-cart-total-value">@string.Format("{0:0,0} đ", Model.Total)</td>
+                                <td></td>
+                            </tr>
+                        </tfoot>
+                    </table>
+                }
+            </div>
+        </div>
+        <h3>Chọn mã đặt phòng</h3>
+        if (Model.DatPhongs != null && Model.DatPhongs.Count() > 0)
+        {
+            @Html.DropDownListFor(m => m.DatPhongs, new SelectList(Model.DatPhongs, "Id", "TenPhong"), new { @class = "form-control", required = "required" })
+        }
+        else
+        {
+            @Html.DropDownListFor(m => m.DatPhongs, new SelectList(Model.DatPhongs, "Id", "TenPhong"), new { @class = "form-control", required = "required" })
+            <p>Không có phòng nào được đặt trong ngày vui lòng đặt phòng để gọi dịch vụ</p>
+        }
+
+        <div class="row">
+            <div class="col-lg-12">
+                <div class="text-center">
+                    <a href="@Url.Action("Services", "Home")" class="btn btn-danger ">Hủy</a>
+                    <button type="submit" class="btn btn-primary ">Đặt Dịch Vụ</button>
+                </div>
+            </div>
+        </div>
+    }
+</div>
+<style>
+    h2, h3, h4 {
+        text-align: center;
+        font-weight: bold;
+        font-size: 36px;
+        margin: 30px 0;
+    }
+</style>

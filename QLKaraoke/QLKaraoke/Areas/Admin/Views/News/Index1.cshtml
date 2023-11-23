@@ -1,0 +1,121 @@
+﻿@using System.Web;
+@using System.Web.Mvc;
+@using PagedList.Mvc;
+@model PagedList.PagedList<QLKaraoke.Models.TinTuc>
+
+@{
+    ViewBag.Title = "Index";
+    Layout = "~/Areas/Admin/Views/Shared/_LayoutAdmin.cshtml";
+}
+
+<div class="pagetitle">
+    <nav>
+        <ol class="breadcrumb">
+            <li class="breadcrumb-item"><a href="/admin/home/index">Home</a></li>
+            <li class="breadcrumb-item">News</li>
+            <li class="breadcrumb-item active">Index</li>
+        </ol>
+    </nav>
+</div>
+
+@using (Html.BeginForm("Index1", "News", FormMethod.Get))
+{
+    <div class="row justify-content-between">
+        <div class="col-md-4">
+            <div class="form-group">
+                <div class="input-group">
+                    <a href="@Url.Action("Create1")" class="btn btn-sm btn-success"><i class="fa fa-plus"></i></a>
+                    <input type="date" name="ngay" class="form-control form-control-sm datepicker" id="datepicker" value="@ViewBag.ngay" />
+                    <div class="input-group-append">
+                        <button type="submit" class="btn btn-sm btn-primary">
+                            <i class="fa fa-search"></i>
+                        </button>
+
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-4 text-right">
+            <div class="form-group">
+                <div class="input-group">
+                    <a href="@Url.Action("Index")" class="btn btn-sm btn-warning">Tin Tức</a>
+                </div>
+            </div>
+        </div>
+    </div>
+    <script>
+        $(function () {
+            $('.datepicker').datepicker({
+                dateFormat: "yy/mm/dd",
+                autoclose: true,
+            }).on('changeDate', function () {
+                $(this)..trigger('change');
+            });
+        });
+    </script>
+}
+<div class="container-fluid">
+
+    <div class="table-responsive">
+        <table class="table table-bordered table-hover">
+            <thead class="thead-dark">
+                <tr>
+                    <th>STT </th>
+                    <th>Tiêu đề</th>
+                    <th>Nội dung</th>
+                    <th>Ứng tuyển</th>
+                    <th>Lương vị trí</th>
+                    <th>Lương </th>
+                    <th>Ngày</th>
+
+                    <th class="text-center">Actions</th>
+                </tr>
+            </thead>
+            <tbody>
+                @{int stt = 1;}
+                @foreach (var item in Model)
+                {
+                    <tr>
+                        <td>@(stt++)</td>
+                        <td>
+                            @Html.Raw(item.TieuDe.Substring(0, Math.Min(item.TieuDe.Length, 20)))@(item.TieuDe.Length > 20 ? "..." : "")
+                        </td>
+                        <td>
+                            @Html.Raw(item.NoiDung.Substring(0, Math.Min(item.NoiDung.Length, 30)))@(item.NoiDung.Length > 30 ? "..." : "")
+                        </td>
+                        <td>@Html.DisplayFor(modelItem => item.ChucVu.TenChucVu)</td>
+                        <td> @string.Format("{0:0,0} đ", item.ChucVu.LuongCV)</td>
+                        <td> @string.Format("{0:0,0} đ", item.Luong)</td>
+                        <td>@item.Ngay.Value.ToString("dd/MM/yyyy")</td>
+                        <td class="text-center">
+
+                            @if (item.TrangThai == 1)
+                            {
+
+                                <a href="@Url.Action("Status1","News",new {@id=item.Id}) " class="btn btn-sm btn-success">On</a>
+                            }
+                            else
+                            {
+                                <a href="@Url.Action("Status1","News",new {@id=item.Id}) " class="btn btn-sm btn-danger">Off</a>
+
+                            }
+                            <a href="@Url.Action("Details", "News", new { @id = item.Id })" class="btn btn-sm btn-warning"><i class="fa fa-eye"></i> </a>
+
+                            <a href="@Url.Action("Delete", new { id = item.Id })" class="btn btn-danger btn-sm" onclick="return confirm('Bạn có chắc muốn xóa?');">
+                                <i class="fas fa-trash-alt"></i>
+                            </a>
+
+                        </td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+    </div>
+</div>
+<div class="product__pagination">
+    Trang @(Model.PageCount < Model.PageNumber ? 0 : Model.PageNumber)/@Model.PageCount
+    <div class="MenuTrang">
+        @Html.PagedListPager(Model, page => Url.Action("Index1", new { page = page }))
+    </div>
+
+</div>

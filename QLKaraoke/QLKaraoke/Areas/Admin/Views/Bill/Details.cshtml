@@ -1,0 +1,225 @@
+﻿@model QLKaraoke.Models.BillDetailsViewModel
+
+@{
+    string title = $"HÓA ĐƠN THANH TOÁN ";
+    Layout = "~/Areas/Admin/Views/Shared/_LayoutAdmin.cshtml";
+}
+
+
+<div style="font-family: Arial, Helvetica, sans-serif; margin-top: 20px; margin-bottom: 20px;" class="print-content">
+    <h2 style="text-align: center; font-size: 24px; margin-bottom: 20px;">
+        HÓA ĐƠN THANH TOÁN (@if (Model.hOADONs.TrangThai == true)
+        {
+            <span class="text-green" style="padding: 8px; color:green">Đã thanh toán</span>
+        }
+
+        else
+        {
+            <span class="text-green" style="padding: 8px; color:red">Tạm tính</span>
+        })
+
+    </h2>
+    <hr style="border-top: 1px solid #000; margin-top: 10px; margin-bottom: 10px;">
+    <div style="display: flex; justify-content: space-between;">
+        <div style="width: 50%;">
+            <p style="font-size: 16px; margin: 0;"><strong>Tên khách hàng:</strong> @Model.hOADONs.Tenkh</p>
+            <p style="font-size: 16px; margin: 0;"><strong>Số điện thoại:</strong> @Model.hOADONs.DatPhong.Sdt</p>
+            <p style="font-size: 16px; margin: 0;"><strong>Email:</strong> @Model.hOADONs.DatPhong.Email</p>
+
+        </div>
+        <div style="width: 50%; text-align: right;">
+            <p style="font-size: 16px; margin: 0;"><strong>Mã đặt:</strong> @Model.hOADONs.DatPhong.MaDat</p>
+            <p style="font-size: 16px; margin: 0;"><strong>Ngày đặt:</strong>  @Model.hOADONs.Ngay.Value.ToString("dd/MM/yyyy")</p>
+            <p style="font-size: 16px; margin: 0;"><strong>Thời gian:</strong> @Html.DisplayFor(model => model.hOADONs.ThoiGianBatDau) - @Html.DisplayFor(model => model.hOADONs.ThoiGianKetThuc)</p>
+        </div>
+    </div>
+    <hr style="border-top: 1px solid #000; margin-top: 10px; margin-bottom: 10px;">
+    <table style="width: 100%; font-size: 16px; border-collapse: collapse;">
+        <tr>
+            <th style="text-align: left; padding: 8px;">Phòng</th>
+            <th style="text-align: left; padding: 8px;">Loại phòng</th>
+            <th style="text-align: left; padding: 8px;">Thời gian</th>
+
+            <th style="text-align: right; padding: 8px;">Tiền phòng</th>
+        </tr>
+        <tr>
+            <td style="padding: 8px;">@Html.DisplayFor(model => model.hOADONs.DatPhong.TenPhong)</td>
+            <td style="padding: 8px;">@Html.DisplayFor(model => model.hOADONs.DatPhong.LoaiP)</td>
+            <td style="padding: 8px;">@Html.DisplayFor(model => model.hOADONs.ThoiGianBatDau) - @Html.DisplayFor(model => model.hOADONs.ThoiGianKetThuc)</td>
+
+            <td style="text-align: right; padding: 8px;">@string.Format("{0:0,0} đ", Model.hOADONs.TienPhong)</td>
+        </tr>
+    </table>
+    <hr style="border-top: 1px solid #000; margin-top: 10px; margin-bottom: 10px;">
+    <table style="width: 100%; font-size: 16px; border-collapse: collapse;">
+        <tr>
+            <th style="text-align: left; padding: 8px;">Nội Dung</th>
+        </tr>
+        <tr>  <td style="padding: 8px;">@Html.Raw(Model.hOADONs.NoiDung)</td></tr>
+    </table>
+    <hr style="border-top: 1px solid #000; margin-top: 10px; margin-bottom: 10px;">
+    @if (Model.suDungDichVus.Any())
+    {
+
+        <table style="width: 100%; font-size: 16px; border-collapse: collapse; float: right">
+
+            <tr>
+                <th style="text-align: left; padding: 8px;">Dịch Vụ Sử Dụng</th>
+            </tr>
+            <tr>
+
+
+                <th style="text-align: left; padding: 8px;">STT</th>
+                <th style="text-align: left; padding: 8px;">Tên Dịch Vụ</th>
+                <th style="text-align: left; padding: 8px;">Số Lượng</th>
+
+                <th style="text-align: right; padding: 8px;">Gía</th>
+
+                <th style="text-align: right; padding: 8px;">Tổng</th>
+                <th></th>
+            </tr>
+
+            @{int stt = 1;}
+            <tbody>
+                @foreach (var suDungDichVu in Model.suDungDichVus)
+                {
+
+                    <tr>
+
+                        <td style="padding: 8px;">@(stt++)</td>
+                        @if (Model.hOADONs.TrangThai == false)
+                        {
+                           
+                            <td style="padding: 8px;"> <a href="@Url.Action("Edit2", "Bill", new { id = @suDungDichVu.ID })">@suDungDichVu.Ten</a></td>
+                            <td style="padding: 8px;"> <a href="@Url.Action("Edit2", "Bill", new { id = @suDungDichVu.ID })">@suDungDichVu.SoLuong: @suDungDichVu.TenDVT</a></td>
+                      
+                        }
+                        else
+                        {
+                            <td style="padding: 8px;">@suDungDichVu.Ten</td>
+                            <td style="padding: 8px;">@suDungDichVu.SoLuong: @suDungDichVu.TenDVT</td>
+                        }
+
+
+                        <td style="text-align: right; padding: 8px;">@suDungDichVu.Gia.Value.ToString("N0") VNĐ</td>
+                        <td style="text-align: right; padding: 8px;">@string.Format("{0:0,0} VNĐ", suDungDichVu.Gia * suDungDichVu.SoLuong)
+
+
+
+
+
+                    </tr>
+                }
+                <tr>
+            </tbody>
+        </table>
+        <table style="width: 100%; font-size: 16px; border-collapse: collapse; float: right">
+
+            <tr>
+                <th style="text-align: left; padding: 8px;">Tiền Dịch Vụ Sử Dụng:
+                <td style="text-align: right; padding: 8px;">    @string.Format("{0:0,0} VNĐ", Model.TongTien)</td> </th>
+            </tr>
+
+        </table>
+    }
+    <hr style="border-top: 1px solid #000; margin-top: 10px; margin-bottom: 10px;">
+
+    <table style="width: 100%; font-size: 16px; border-collapse: collapse;">
+
+        <tr>
+
+            <td style="padding: 8px;"><strong>Giờ sử dụng:</strong></td>
+            <td style="text-align: right; padding: 8px;">@String.Format("{0:0.00}", (Model.hOADONs.ThoiGianKetThuc.Value - Model.hOADONs.ThoiGianBatDau.Value).TotalHours) Giờ</td>
+        </tr>
+        @if (Model.hOADONs.TienThem > 0)
+        {
+            <tr>
+                <td style="padding: 8px;"><strong>Tiền thêm dịch vụ:</strong></td>
+                <td style="text-align: right; padding: 8px;">@string.Format("{0:0,0} VNĐ", Model.hOADONs.TienThem)</td>
+            </tr>
+        }
+        @if (Model.hOADONs.TienGiam > 0)
+        {
+            <tr>
+                <td style="padding: 8px;"><strong>Tiền giảm dịch vụ :</strong></td>
+                <td style="text-align: right; padding: 8px;">@string.Format("{0:0,0} VNĐ", Model.hOADONs.TienGiam)</td>
+            </tr>
+        }
+        @if (Model.hOADONs.DatPhong.LoaiPhong.DonGia > 0)
+        {
+            <tr>
+                <td style="padding: 8px;"><strong>Tiền Loại:</strong></td>
+                <td style="text-align: right; padding: 8px;"> @string.Format("{0:0,0} VNĐ", Model.hOADONs.DatPhong.LoaiPhong.DonGia)</td>
+            </tr>
+        }
+        @if (Model.hOADONs.DatPhong.DaysOfWeek.Gia > 0)
+        {
+            <tr>
+                <td style="padding: 8px;"><strong>Tiền Ngày:</strong></td>
+                <td style="text-align: right; padding: 8px;"> @string.Format("{0:0,0} VNĐ", Model.hOADONs.DatPhong.DaysOfWeek.Gia)</td>
+            </tr>
+        }
+        @if (Model.hOADONs.DatPhong.TienDichVu!= Model.TongTien)
+        {
+            <tr>
+                <td style="padding: 8px;"><strong>Tiền Dịch Vụ Ban Đầu:</strong></td>
+                <td style="text-align: right; padding: 8px;"> @string.Format("{0:0,0} VNĐ", Model.hOADONs.DatPhong.TienDichVu)</td>
+            </tr>
+        }
+        <tr>
+            <td style="padding: 8px;"><strong>Tiền Phòng 1 giờ:</strong></td>
+            <td style="text-align: right; padding: 8px;"> @string.Format("{0:0,0} VNĐ", Model.hOADONs.DatPhong.Phong.DonGia)</td>
+        </tr>
+
+        <tr>
+            <td style="padding: 8px;"><strong>Tiền phòng @String.Format("{0:0.00}", (Model.hOADONs.DatPhong.TimeEnd.Value - Model.hOADONs.DatPhong.TimeStar.Value).TotalHours) giờ:</strong></td>
+            <td style="text-align: right; padding: 8px;">@string.Format("{0:0,0} VNĐ", Model.hOADONs.TienPhong)</td>
+        </tr>
+
+
+
+        @if (Model.hOADONs.TienGG > 0)
+        {
+            <tr>
+                <td style="padding: 8px;"><strong>Tiền giảm giá:</strong></td>
+                <td style="text-align: right; padding: 8px;">@string.Format("{0:0,0} VNĐ", Model.hOADONs.TienGG)</td>
+            </tr>
+        }
+        @if (Model.hOADONs.TienDv > 0)
+        {
+            <tr>
+                <td style="padding: 8px;"><strong>Tiền dịch vụ:</strong></td>
+                <td style="text-align: right; padding: 8px;">@string.Format("{0:0,0} VNĐ", Model.hOADONs.TienDv)</td>
+            </tr>
+        }
+        <tr>
+            <td style="padding: 8px;"><strong>Tổng tiền:</strong></td>
+            <td style="text-align: right; padding: 8px;">@string.Format("{0:0,0} VNĐ", Model.hOADONs.ThanhTien)</td>
+        </tr>
+    </table>
+
+    <hr style="border-top: 1px solid #000; margin-top: 10px; margin-bottom: 10px;">
+    <p style="text-align: center; font-size: 14px;">Cảm ơn quý khách đã sử dụng dịch vụ của chúng tôi!</p>
+
+</div>
+<div class="form-group">
+    <div class="col-md-offset-2 col-md-10">
+        <button class="btn btn-info" onclick="window.print()" style="float: right;">In Hóa đơn</button>
+
+
+      
+        @if (Model.hOADONs.TrangThai == true)
+        {
+            @Html.ActionLink("Xác Nhận", "Details", new { id = Model.hOADONs.IDHoaDon }, new { @class = "btn btn-primary btn-sm" })
+        }
+        else
+        {
+            @Html.ActionLink("Xác Nhận", "Edit1", new { id = Model.hOADONs.IDHoaDon }, new { @class = "btn btn-info btn-sm" })
+        }
+
+        @Html.ActionLink("Trở lại", "Index", new { area = "Admin" }, new { @class = "btn btn-default" })
+
+
+    </div>
+
+</div>

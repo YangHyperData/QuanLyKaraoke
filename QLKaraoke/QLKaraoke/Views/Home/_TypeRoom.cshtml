@@ -1,0 +1,8 @@
+﻿
+@model List<QLKaraoke.Models.LoaiPhong>
+
+@foreach (var RoomType in Model)
+{
+    <li><a style="text-align:left" href="@Url.Action("RoomType", "Home", new { id = RoomType.IDLoaiPhong })">@RoomType.TenPhong</a></li>
+}
+

@@ -1,0 +1,35 @@
+﻿@model IEnumerable<QLKaraoke.Models.Time>
+
+@{
+    ViewBag.Title = "Index";
+    Layout = "~/Areas/Admin/Views/Shared/_LayoutAdmin.cshtml";
+}
+
+<table class="table">
+    <a href="@Url.Action("Create")" class="btn btn-sm btn-success"><i class="fa fa-plus"></i> Thêm </a>
+    <thead>
+        <tr>
+            <th>STT</th>
+            <th>Thời Gian</th>
+
+            <th>Gía</th>
+            <th>Action</th>
+        </tr>
+    </thead>
+    <tbody>
+        @{int stt = 1;}
+        @foreach (var item in Model)
+        {
+            <tr>
+                <td>@(stt++)</td>
+                <td>@Html.DisplayFor(modelItem => item.TimeStar)-@Html.DisplayFor(modelItem => item.TimeEnd)</td>
+
+                <td class="text-center">@string.Format("{0:0,0} đ", item.Gia)</td>
+                <td>
+                    @Html.ActionLink("Sửa", "Edit", new { id = item.Id }, new { @class = "btn btn-warning" })
+                    @Html.ActionLink("Xóa", "Delete", new { id = item.Id }, new { @class = "btn btn-danger" })
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>

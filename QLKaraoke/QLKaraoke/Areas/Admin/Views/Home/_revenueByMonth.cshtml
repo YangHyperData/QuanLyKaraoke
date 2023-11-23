@@ -1,0 +1,92 @@
+﻿@using QLKaraoke.Models;
+@using System.Data.Entity;
+@using System.Web.Script.Serialization;
+
+@{
+    QLKARAOKEEntities db = new QLKARAOKEEntities();
+    var thisYear = DateTime.Now.Year;
+    var revenueByMonth = db.HOADONs
+               .Where(i => i.Ngay.Value.Year == thisYear)
+               .GroupBy(i => i.Ngay.Value.Month)
+               .Select(g => new { Month = g.Key, Revenue = g.Sum(i => i.ThanhTien) })
+               .OrderBy(g => g.Month)
+               .ToList();
+}
+<div class="col-12">
+    <div class="card">
+        <div class="filter">
+            <a class="icon" href="#" data-bs-toggle="dropdown"><i class="bi bi-three-dots"></i></a>
+            <ul class="dropdown-menu dropdown-menu-end dropdown-menu-arrow">
+                <li class="dropdown-header text-start">
+                    <h6>Filter</h6>
+                </li>
+                <li><a class="dropdown-item" href="#">Today</a></li>
+                <li><a class="dropdown-item" href="#">This Month</a></li>
+                <li><a class="dropdown-item" href="#">This Year</a></li>
+            </ul>
+        </div>
+
+        <div class="card-body">
+            <h5 class="card-title">Doanh Thu Từng Tháng <span>/{@thisYear}</span></h5>
+
+            <!-- Line Chart -->
+            <div id="revenueByMonthChart"></div>
+
+            <script>
+            document.addEventListener("DOMContentLoaded", () => {
+                new ApexCharts(document.querySelector("#revenueByMonthChart"), {
+                    series: [{
+                        name: 'Doanh Thu',
+                        data: @Html.Raw(new JavaScriptSerializer().Serialize(revenueByMonth.Select(m => m.Revenue).ToList())),
+                    }],
+                    chart: {
+                        height: 500,
+                        type: 'line',
+                        toolbar: {
+                            show: false
+                        },
+                    },
+                    markers: {
+                        size: 4
+                    },
+                    colors: ['#2eca6a'],
+                    fill: {
+                        type: "gradient",
+                        gradient: {
+                            shadeIntensity: 1,
+                            opacityFrom: 0.3,
+                            opacityTo: 0.4,
+                            stops: [0, 90, 100]
+                        }
+                    },
+                    dataLabels: {
+                        enabled: false
+                    },
+                    stroke: {
+                        curve: 'smooth',
+                        width: 2
+                    },
+                  xaxis: {
+                            type: 'category',
+                            categories: @Html.Raw(new JavaScriptSerializer().Serialize(revenueByMonth.Select(m => System.Globalization.CultureInfo.CurrentCulture.DateTimeFormat.GetMonthName(m.Month).ToLower() + " (" + m.Month + ")").ToList())),
+                        },
+
+                    tooltip: {
+                        y: {
+                            formatter: function (val) {
+                                return val.toLocaleString('vi-VN', {
+                                    style: 'currency',
+                                    currency: 'VND'
+                                });
+                            }
+                        }
+                    }
+                }).render();
+            });
+            </script>
+            <!-- End Line Chart -->
+
+        </div>
+
+    </div>
+</div>

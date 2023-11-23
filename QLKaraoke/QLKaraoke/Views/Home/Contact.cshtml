@@ -1,0 +1,125 @@
+﻿@model QLKaraoke.Models.LienHe
+@{
+    ViewBag.Title = "Contact";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<section class="contact_section layout_padding">
+    <div class="container">
+        <div class="row">
+            <div class="col-md-6">
+                <div class="form_container">
+                    <div class="heading_container">
+                        <h2>
+                            LIÊN HỆ
+                        </h2>
+                    </div>
+                    @using (Html.BeginForm())
+                    {
+                        @Html.AntiForgeryToken()
+                        if (TempData["SuccessMessage"] != null)
+                        {
+                            <div class="alert alert-success">
+                                @TempData["SuccessMessage"]
+                            </div>
+                        }
+                        <div class="form-horizontal">
+
+                            @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+                            <div class="form-group">
+                                <label style="font-size:100%">Tên Khách Hàng:</label>
+                                <div class="col-md-10">
+                                    @Html.EditorFor(model => model.TenKH, new { htmlAttributes = new { @class = "form-control", placeholder = "Vui lòng nhập tên của bạn", @required = "required" } })
+                                    @Html.ValidationMessageFor(model => model.TenKH, "", new { @class = "text-danger", data_val_required = "Vui lòng nhập họ tên khách hàng!" })
+                                </div>
+                            </div>
+
+                            <div class="form-group">
+                                <label style="font-size:100%">Nội Dung Liên Hệ:</label>
+                                <div class="col-md-10">
+                                    @Html.TextAreaFor(model => model.NoiDung, new { htmlAttributes = new { @class = "form-control", placeholder = "Vui lòng nhập nội dung", @required = "required", @id = "NoiDung" } })
+                                    @Html.ValidationMessageFor(model => model.NoiDung, "", new { @class = "text-danger" })
+                                </div>
+
+                            </div>
+
+
+                            <div class="form-group">
+                                <label style="font-size:100%">Số Điện Thoại:</label>
+                                <div class="col-md-10">
+                                    @Html.EditorFor(model => model.SDT, new { htmlAttributes = new { @class = "form-control", placeholder = "Vui lòng nhập số điện thoại", @required = "required" } })
+                                    @Html.ValidationMessageFor(model => model.SDT, "", new { @class = "text-danger" })
+                                </div>
+                            </div>
+
+                            <div class="form-group">
+                                <label style="font-size:100%">Email:</label>
+                                <div class="col-md-10">
+                                    @Html.EditorFor(model => model.Email, new { htmlAttributes = new { @class = "form-control", placeholder = "Vui lòng nhập địa chỉ email", @required = "required", @pattern = ".+@gmail.com", @title = "Vui lòng nhập địa chỉ email của bạn kết thúc bằng @gmail.com" } })
+                                    @Html.ValidationMessageFor(model => model.Email, "", new { @class = "text-danger", data_val_required = "Vui lòng nhập đúng định dạng Email!" })
+                                </div>
+                            </div>
+
+                            <div class="form-group">
+
+                                <div class="d-flex col-md-10 ">
+
+                                    <button type="submit" class="btn btn-primary">
+                                        Gửi Liên Hệ
+                                    </button>
+                                    @ViewBag.SuccessMessage
+
+
+                                </div>
+
+                            </div>
+
+
+
+                        </div>
+                    }
+
+                </div>
+               
+            </div>
+            <div class="col-md-6">
+                <div class="img-box">
+                    <img src="~/Asset/Img/R.png" alt="">
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<script src="https://cdn.ckeditor.com/ckeditor5/29.0.0/classic/ckeditor.js"></script>
+<script>
+    ClassicEditor
+        .create(document.querySelector('#NoiDung'), {
+            autoParagraph: false
+        })
+        .then(editor => {
+            console.log(editor);
+        })
+        .catch(error => {
+            console.error(error);
+        });
+    CKEDITOR.replace('#NoiDung', {
+        height: 500
+    });
+    
+</script>
+
+<script>
+    var requiredInputs = document.querySelectorAll('[required]');
+
+    for (var i = 0; i < requiredInputs.length; i++) {
+        requiredInputs[i].oninvalid = function () {
+            this.setCustomValidity('Vui lòng điền thông tin!');
+        };
+        requiredInputs[i].oninput = function () {
+            this.setCustomValidity('');
+        };
+    }
+</script>
+
+

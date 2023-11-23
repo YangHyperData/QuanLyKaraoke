@@ -1,0 +1,320 @@
+﻿
+@Html.ValidationSummary(true, "", new { @class = "text-danger" })
+<div class="product-detail">
+    <div class="row">
+        <div class="col-md-6 col-sm-12">
+            <div class="product-image">
+                <img style="margin-left:150px" src="~/Areas/Admin/assets/img/@Model.HinhAnh" alt="@Model.Ten" class="product-image">
+            </div>
+        </div>
+        <div class="col-md-6 col-sm-10">
+            <div class="product-info">
+                <h1 class="product-name">@Model.Ten</h1>
+                @if (Model.MoTa != null)
+                {
+                    <div class="product-quantity-info">
+                        <span class="product-sold-label">Mô Tả:</span>
+                        <span class="product-description">@Html.Raw(Model.MoTa)</span>
+                    </div>
+                }
+
+                <div class="product-price-info">
+                    <span class="product-price-label">Giá:</span>
+                    <span class="product-price-value">@string.Format("{0:0,0} đ", @Model.TongGia)</span>
+                </div>
+                <div class="product-quantity-info">
+                    <span class="product-sold-label">Số lượng:</span>
+                    <span class="product-sold-value">@Model.SoLuong</span>
+                </div>
+                <div class="product-quantity-info">
+                    <span class="product-sold-label">Đơn Vị:</span>
+                    <span class="product-sold-value">@Model.DVT</span>
+                </div>
+                <div class="product-sold-info">
+                    <span class="product-sold-label">Đã bán:</span>
+                    <span class="product-sold-value">@Model.DaBan</span>
+                </div>
+                <div class="product-add-to-cart">
+                    <form action="@Url.Action("AddCartAll", "UseService", new {ms=Model.IDDichVu,url=Request.Url.ToString()})" method="post">
+
+                        <div class="product__details__quantity">
+                            <div class="quantity">
+                                <div class="pro-qty">
+                                    <span class="qty-minus" onclick="decreaseQty()">-</span>
+                                    <input type="text" name="SoLuong" value="1" min="1" size="3" />
+                                    <span class="qty-plus" onclick="increaseQty()">+</span>
+                                </div>
+                            </div>
+                        </div>
+                        <input type="submit" class="primary-btn" value="Đặt Dịch Vụ">
+                    </form>
+                    <script>
+                        function increaseQty() {
+                            var qty = parseInt(document.getElementsByName("SoLuong")[0].value);
+                            document.getElementsByName("SoLuong")[0].value = qty + 1;
+                        }
+                        function decreaseQty() {
+                            var qty = parseInt(document.getElementsByName("SoLuong")[0].value);
+                            if (qty > 1) {
+                                document.getElementsByName("SoLuong")[0].value = qty - 1;
+                            }
+                        }
+                    </script>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<h2 class="page-heading">Bình Luận</h2>
+<div class="comment-wrapper">
+    <div class="fb-comments" data-href="https://localhost:44312/" data-width="100%" data-numposts="10"></div>
+</div>
+
+<div id="fb-root"></div>
+<script async defer crossorigin="anonymous" src="https://connect.facebook.net/vi_VN/sdk.js#xfbml=1&version=v16.0" nonce="YPvNBz3v"></script>
+<style>
+    .product-price-value {
+        color: #ff6f00;
+        font-weight: bold;
+        font-size: 24px;
+        transition: all 0.3s ease-in-out;
+    }
+
+        .product-price-value:hover {
+            color: #fff;
+            background-color: #ff6f00;
+            padding: 5px 10px;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+    .product-image img:hover {
+        transform: scale(1.05);
+        transition: all 0.3s ease-in-out;
+    }
+    .qty-minus, .qty-plus {
+  
+      
+        text-align: center;
+        border: 1px solid #ebebeb;
+        cursor: pointer;
+        background-color: #fff;
+    }
+
+        .qty-minus:hover, .qty-plus:hover {
+            background-color: #ff6f00;
+            color: #fff;
+            border-color: #ff6f00;
+        }
+
+    .page-heading {
+        font-size: 24px;
+        font-weight: bold;
+        margin-bottom: 20px;
+    }
+
+    .comment-wrapper {
+        max-width: 100%;
+        margin-top: 30px;
+        padding: 10px;
+        background-color: #f5f5f5;
+        border-radius: 10px;
+    }
+
+    .fb-comments {
+        width: 100% !important;
+    }
+
+    .fb_iframe_widget span {
+        width: 100% !important;
+    }
+    .primary-btn:hover {
+    background-color: #ff6f00;
+    color: #fff;
+}
+
+    .page-heading {
+        font-size: 24px;
+        font-weight: bold;
+        margin-bottom: 20px;
+    }
+
+    .comment-wrapper {
+        max-width: 100%;
+        margin-top: 30px;
+        padding: 10px;
+        background-color: #f5f5f5;
+        border-radius: 10px;
+    }
+
+    .fb-comments {
+        width: 100% !important;
+    }
+
+    .fb_iframe_widget span {
+        width: 100% !important;
+    }
+
+    .qty-minus {
+        background-color: red;
+        color: #fff;
+    }
+
+    .qty-plus {
+        background-color: green;
+        color: #fff;
+    }
+
+    .qty-minus, .qty-plus {
+        font-size: 20px;
+        width: 100px;
+        height: 100px;
+    }
+
+
+    .product-detail {
+        margin-top: 50px;
+        padding: 20px;
+        border: 1px solid #ccc;
+        border-radius: 5px;
+    }
+
+    .product-image {
+        max-width: 100%;
+        max-height: 500px;
+        margin-bottom: 20px;
+    }
+
+    .product-name {
+        font-size: 24px;
+        margin-bottom: 10px;
+    }
+
+    .product-description {
+        margin-bottom: 20px;
+    }
+
+    .product-price-info,
+    .product-quantity-info,
+    .product-sold-info {
+        margin-bottom: 10px;
+    }
+
+    .product-price-label,
+    .product-quantity-label,
+    .product-sold-label {
+        display: inline-block;
+        width: 100px;
+        font-weight: bold;
+    }
+
+    .product-price-value,
+    .product-quantity-value,
+    .product-sold-value {
+        display: inline-block;
+    }
+
+    .product-add-to-cart {
+        margin-top: 20px;
+    }
+
+    .product-quantity-input {
+        margin-bottom: 10px;
+    }
+
+    .product-quantity-label {
+        display: inline-block;
+        width: 220px;
+        font-weight: bold;
+    }
+
+    .product-quantity-input input[type=number] {
+        width: 100px;
+        margin-left: 10px;
+        padding: 6px 12px;
+        font-size: 14px;
+        line-height: 1.42857143;
+        color: #555;
+        background-color: #fff;
+        background-image: none;
+        border: 1px solid #ccc;
+        border-radius: 4px;
+        -webkit-appearance: none;
+        -moz-appearance: none;
+        appearance: none;
+    }
+
+        .product-quantity-input input[type=number]::-webkit-inner-spin-button,
+        .product-quantity-input input[type=number]::-webkit-outer-spin-button {
+            -webkit-appearance: none;
+            margin: 0;
+        }
+
+    .primary-btn {
+        display: inline-block;
+        padding: 8px 16px;
+        font-size: 14px;
+        font-weight: 600;
+        line-height: 1.42857143;
+        text-align: center;
+        white-space: nowrap;
+        vertical-align: middle;
+        cursor: pointer;
+        -webkit-user-select: none;
+        -moz-user-select: none;
+        -ms-user-select: none;
+        user-select: none;
+        background-image: none;
+        border: 1px solid transparent;
+        border-radius: 4px;
+        color: #fff;
+        background-color: #5cb85c;
+        border-color: #4cae4c;
+    }
+
+        .primary-btn:hover,
+        .primary-btn:focus,
+        .primary-btn:active,
+        .primary-btn.active {
+            color: #fff;
+            background-color: #449d44;
+            border-color: #398439;
+        }
+
+    .pro-qty input[type=number] {
+        -webkit-appearance: none;
+        -moz-appearance: none;
+        appearance: none;
+        border: none;
+        text-align: center;
+        width: 40px;
+        height: 40px;
+        font-size: 16px;
+        color: #666;
+        font-weight: 400;
+        background: #f5f5f5;
+    }
+
+    .pro-qty .qtybtn {
+        width: 30px;
+        height: 30px;
+        background: #f5f5f5;
+        border-radius: 50%;
+        border: none;
+        color: #000;
+        font-size: 14px;
+        font-weight: 600;
+        line-height: 1.42857143;
+        text-align: center;
+        padding: 0;
+        cursor: pointer;
+    }
+
+        .pro-qty .qtybtn:last-child {
+            margin-bottom: 0;
+        }
+
+        .pro-qty .qtybtn:focus,
+        .pro-qty .qtybtn:hover {
+            background: #e6e6e6;
+        }
+</style>

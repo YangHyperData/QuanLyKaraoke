@@ -1,0 +1,66 @@
+﻿@using QLKaraoke.Models
+@using System.Data.Entity;
+@{
+    QLKARAOKEEntities db = new QLKARAOKEEntities();
+    KhachHangg cust = (KhachHangg)Session["CInfo"];
+    int ID = Convert.ToInt32(cust.ID.ToString());
+    var bill = db.SuDungDichVus.Include(s => s.DichVu1).Include(s => s.KhachHangg).Include(s => s.DatPhong)
+    .Where(n => (n.DatPhong.IdKH == ID)&&n.TrangThai==true).OrderByDescending(d => d.NgayTao == DateTime.Today)
+                .ThenByDescending(d => d.ID).ToList();
+}
+@if (bill.Count == 0)
+{
+    <text>
+        <h2 class="text-black-50 font-weight-bold text-center p-3">Dịch Vụ</h2>
+    </text>
+}
+else
+{
+    <text>
+        <div>
+            <table class="table table-striped">
+                    <tr>
+                        <th>
+                            Tên
+                        </th>
+                        <th>
+                            Số Lượng
+                        </th>
+                        <th>
+                            Ngày
+                        </th>
+                        <th>
+                           Thời gian
+                        </th>
+                        <th>
+                            Tiền
+                        </th>
+                    </tr>
+
+                @foreach (var item in bill)
+                {
+                    <tr>
+                        <td>
+                            @item.Ten
+                        </td>
+                        <td>
+                            @item.SoLuong : @item.TenDVT
+                        </td>
+                        <td>
+                            @item.NgayTao.Value.ToString("dd/MM/yyyy")
+                        </td>
+                        <td>
+                            @item.DatPhong.TimeStar-@item.DatPhong.TimeEnd
+                        </td>
+                        <td>@string.Format("{0:0,0} đ", item.Gia * item.SoLuong)</td>
+
+                    </tr>
+                }
+            </table>
+        </div>
+    </text>
+}
+
+
+
+

@@ -1,0 +1,110 @@
+﻿
+@{
+    ViewBag.Title = "BookingConfirmation";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+@model QLKaraoke.Models.DatPhong
+<style>
+    body {
+        background-color: #f2f2f2;
+        font-family: Arial, Helvetica, sans-serif;
+        color: #333;
+    }
+
+    .container {
+        margin-top: 50px;
+    }
+
+    .card {
+        background-color: #fff;
+        border-radius: 10px;
+        padding: 30px;
+        box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+    }
+
+    h2 {
+        font-size: 36px;
+        font-weight: bold;
+        margin-bottom: 30px;
+        text-align: center;
+        color: #333;
+    }
+
+    h4 {
+        font-size: 24px;
+        font-weight: bold;
+        margin-bottom: 20px;
+        color: #333;
+    }
+
+    ul {
+        list-style: none;
+        padding-left: 0;
+        margin-bottom: 30px;
+    }
+
+    li {
+        font-size: 20px;
+        margin-bottom: 15px;
+    }
+
+    p {
+        font-size: 18px;
+        text-align: justify;
+        margin-top: 30px;
+
+    }
+    .print-button {
+        position: fixed;
+        bottom: 20px;
+        right: 20px;
+        padding: 10px 20px;
+        font-size: 16px;
+        background-color: #4CAF50;
+        color: #fff;
+        border: none;
+        border-radius: 5px;
+        cursor: pointer;
+    }
+      .printable {
+        display: block !important;
+        visibility: visible !important;
+        opacity: 1 !important;
+    }
+    }
+
+</style>
+<div class="container">
+    <div class="card">
+        <h2>Cảm ơn bạn @Model.KhachHangg.Name đã đặt phòng thành công</h2>
+        <div class="row">
+            <div class="col-md-6">
+                <h4>Thông tin khách hàng</h4>
+                <ul>
+                    <li>Tên phòng: @Model.TenPhong</li>
+                    <li>Loại phòng: @Model.LoaiP</li>
+                    <li>Số điện thoại: @Model.Sdt</li>
+                    <li>Email: @Model.Email</li>
+                </ul>
+            </div>
+            <div class="col-md-6">
+                <h4>Thông tin đặt phòng</h4>
+                <ul>
+                    <li>Mã đặt phòng: @Model.MaDat</li>
+                    <li>Thời gian bắt đầu: @Model.TimeStar</li>
+                    <li>Thời gian kết thúc: @Model.TimeEnd</li>
+                    <li>Ngày hát: @Model.Ngay.Value.ToString("dd/MM/yyyy")</li>
+                    @if (@Model.TienGiamGia > 0)
+                    {
+                        <li>Tiền giảm gía:  @string.Format("{0:0,0} đ", Model.TienGiamGia)</li>
+                    }
+                    <li>Thành tiền: @string.Format("{0:0,0} đ", Model.ThanhTien)</li>
+                </ul>
+            </div>
+        </div>
+        <p>Vui lòng đến đúng ngày  @Model.Ngay.Value.ToString("dd/MM/yyyy") và đưa nhân viên mã đặt phòng hoặc có thể xem lại mã ở hồ sơ.</p>
+        <button class="print-button" onclick="window.print()">In vé đặt phòng</button>
+
+    </div>
+</div>

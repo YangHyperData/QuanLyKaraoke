@@ -1,0 +1,98 @@
+﻿@using QLKaraoke.Models
+@using System.Data.Entity;
+@{
+    QLKARAOKEEntities db = new QLKARAOKEEntities();
+    KhachHangg cust = (KhachHangg)Session["CInfo"];
+    int ID = Convert.ToInt32(cust.ID.ToString());
+
+    var Staff = db.NhanViens.Include(s => s.ChucVu).Include(s => s.KhachHangg).Where(n => (n.IdKh == ID))
+              .OrderByDescending(d => d.IDNhanVien).ToList();
+}
+@if (Staff.Count == 0)
+{
+    <text>
+    
+    </text>
+}
+else
+{
+    <hr />
+
+    <div class="row">
+        <div class="col-md-12">
+            <div class="card mb-4 mb-md-0">
+                <div class="card-body">
+                    <p class="mb-4 font-weight-bold">
+                        Hồ Sơ
+                    </p>
+                    <div class="order-panel">
+                        <text>
+                            <div>
+                                <table class="table table-striped">
+                                    <tr>
+                                        <th>
+                                            Tên
+                                        </th>
+                                        <th>
+                                            Ngày Sinh
+                                        </th>
+                                        <th>
+                                            Chức Vụ
+                                        </th>
+                                        <th>
+                                            Lương
+                                        </th>
+
+                                        <th>
+                                            Trạng Thái
+                                        </th>
+                                    </tr>
+
+                                    @foreach (var item in Staff)
+                                    {
+                                        <tr>
+                                            <td>
+                                                @item.HoTenNV
+                                            </td>
+                                            <td>
+                                                @item.NgaySinh.Value.ToString("dd/MM/yyyy")
+                                            </td>
+                                            <td>
+                                                @item.ChucVu.TenChucVu
+                                            </td>
+                                            <td>@string.Format("{0:0,0} đ", item.Luong)</td>
+                                            <td>
+                                                @if (item.TrangThai == 1)
+                                                {
+                                                    <span class="text-success">Đang làm</span>
+                                                }
+                                                else if (item.TrangThai == 2)
+                                                {
+                                                    <span class="text-warning">Chờ duyệt</span>
+                                                }
+                                                else if (item.TrangThai == 3)
+                                                {
+                                                    <span class="text-danger">Nghỉ việc</span>
+                                                }
+                                                else
+                                                {
+                                                    <span class="text-secondary">Hủy nhận</span>
+                                                }
+                                            </td>
+
+
+                                        </tr>
+                                    }
+                                </table>
+                            </div>
+                        </text>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+}
+
+
+
+

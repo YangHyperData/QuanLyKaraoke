@@ -1,0 +1,28 @@
+﻿@model QLKaraoke.Models.LoaiPhong
+
+@{
+    ViewBag.Title = "Xóa loại phòng";
+    Layout = "~/Areas/Admin/Views/Shared/_LayoutAdmin.cshtml";
+}
+
+<h2>Xóa loại phòng</h2>
+
+<p>Bạn có chắc chắn muốn xóa loại phòng "@Model.TenPhong" không?</p>
+
+@using (Html.BeginForm("Delete", "TypeRoom", FormMethod.Post))
+{
+    @Html.AntiForgeryToken()
+
+    <input type="hidden" name="id" value="@Model.IDLoaiPhong" />
+
+    <button type="submit" class="btn btn-danger">Xóa</button>
+    <a href="@Url.Action("Index")" class="btn btn-secondary">Hủy</a>
+}
+
+@section Scripts {
+    <script>
+        $('form').submit(function () {
+            return confirm("Bạn có chắc chắn muốn xóa loại phòng này không?");
+        });
+    </script>
+}

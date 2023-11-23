@@ -1,0 +1,87 @@
+﻿@model QLKaraoke.Models.Time
+@using QLKaraoke.Models
+@{
+    ViewBag.Title = "Create";
+    Layout = "~/Areas/Admin/Views/Shared/_LayoutAdmin.cshtml";
+}
+
+
+
+<div class="row">
+    <div class="col-md-6">
+        @using (Html.BeginForm())
+        {
+            @Html.AntiForgeryToken()
+            <div class="form-horizontal">
+                <div class="form-group">
+                    @Html.LabelFor(model => model.TimeStar, "Thời gian bắt đầu:", htmlAttributes: new { @class = "control-label col-md-4" })
+                    <div class="col-md-8">
+                        @Html.EditorFor(model => model.TimeStar, new { htmlAttributes = new { @class = "form-control", type = "time" } })
+                        @Html.ValidationMessageFor(model => model.TimeStar, "", new { @class = "text-danger" })
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    @Html.LabelFor(model => model.TimeEnd, "Thời gian kết thúc:", htmlAttributes: new { @class = "control-label col-md-4" })
+                    <div class="col-md-8">
+                        @Html.EditorFor(model => model.TimeEnd, new { htmlAttributes = new { @class = "form-control", type = "time" } })
+                        @Html.ValidationMessageFor(model => model.TimeEnd, "", new { @class = "text-danger" })
+                    </div>
+                </div>
+                <script>
+                    $(function () {
+                        $('input[type="time"]').timepicker({
+                            timeFormat: 'HH:mm',
+                            interval: 30,
+                            minTime: '00:00',
+                            maxTime: '24:59',
+                            defaultTime: '12',
+                            startTime: '00:00',
+                            dynamic: false,
+                            dropdown: true,
+                            scrollbar: true
+                        });
+                    });
+                </script>
+                <div class="form-group">
+                    @Html.LabelFor(model => model.Gia, "Giá:", htmlAttributes: new { @class = "control-label col-md-4" })
+                    <div class="col-md-8">
+                        @Html.EditorFor(model => model.Gia, new { htmlAttributes = new { @class = "form-control" } })
+                        @Html.ValidationMessageFor(model => model.Gia, "", new { @class = "text-danger" })
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <div class="col-md-offset-4 col-md-8">
+                        <input type="submit" value="Thêm" class="btn btn-default btn-success" />
+                        @Html.ActionLink("Hủy", "Index", null, new { @class = "btn btn-default btn-danger" })
+                    </div>
+                </div>
+            </div>
+        }
+    </div>
+
+    <div class="col-md-6">
+        <h3>Danh sách khoảng thời gian đã tạo</h3>
+        <table class="table">
+            <thead>
+                <tr>
+                    <th>Thời gian </th>
+                  
+                    <th>Giá</th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var timeSlot in ViewBag.TimeSlots)
+                {
+                    <tr>
+                        <td>@timeSlot.TimeStar.ToString("hh\\:mm")-@timeSlot.TimeEnd.ToString("hh\\:mm")</td>
+                       
+                        <td >@string.Format("{0:0,0} đ", timeSlot.Gia)</td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+    </div>
+</div>
+

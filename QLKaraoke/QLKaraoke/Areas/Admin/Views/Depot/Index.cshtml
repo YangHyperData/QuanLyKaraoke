@@ -1,0 +1,84 @@
+﻿@using System.Web;
+@using System.Web.Mvc;
+@using PagedList.Mvc;
+@model PagedList.PagedList<QLKaraoke.Models.KhoHang>
+
+
+@{
+    ViewBag.Title = "Index";
+    Layout = "~/Areas/Admin/Views/Shared/_LayoutAdmin.cshtml";
+}
+
+<div class="pagetitle">
+    <nav>
+        <ol class="breadcrumb">
+            <li class="breadcrumb-item"><a href="/admin/home/index">Home</a></li>
+            <li class="breadcrumb-item">Depot</li>
+            <li class="breadcrumb-item active">Index</li>
+        </ol>
+    </nav>
+</div>
+@using (Html.BeginForm("Index", "Depot", FormMethod.Get))
+{
+    <div class="form-group">
+        <a href="@Url.Action("Create")" class="btn btn-sm btn-success"><i class="fa fa-plus"></i> </a>
+        <input type="text" name="searchQuery" placeholder="Nhập Tên...." value="@Request.QueryString["searchQuery"]" />
+        <button type="submit" class="btn btn-sm btn-primary">
+            <i class="fa fa-search"></i>
+        </button>
+
+    </div>
+}
+<table class="table">
+
+    <thead>
+        <tr>
+            <th>STT</th>
+            <th>Tên Mặt Hàng</th>
+            <th>Số Lượng</th>
+            <th>Còn Lại</th>
+            <th>Đơn Gía</th>
+            <th>Tổng Gía</th>
+            <th>Tên ĐVT</th>
+            <th>Loại</th>
+            <th>Actions</th>
+        </tr>
+    </thead>
+    <tbody>
+        @{int stt = 1;}
+
+        @foreach (var item in Model)
+        {
+            <tr>
+
+                <td>@(stt++)</td>
+                <td>@Html.DisplayFor(modelItem => item.TenMatHang)</td>
+                <td>@Html.DisplayFor(modelItem => item.SoLuong)</td>
+                <td>@Html.DisplayFor(modelItem => item.ConLai)</td>
+                <td>@string.Format("{0:0,0} đ", item.DonGia)</td>
+                <td>@string.Format("{0:0,0} đ", item.TongGia)</td>
+                <td>@Html.DisplayFor(modelItem => item.DonViTinh.TenDonVi)</td>
+                <td>@Html.DisplayFor(modelItem => item.LoaiDV1.TenDV)</td>
+                <td>
+                    <a href="@Url.Action("Edit", new { id = item.IDMatHang })" class="btn btn-sm btn-primary">
+                        <i class="fa fa-pencil-alt"></i> 
+                    </a>
+                    <a href="@Url.Action("Details", new { id = item.IDMatHang })" class="btn btn-sm btn-info">
+                        <i class="fa fa-eye"></i> 
+                    </a>
+                    <a href="@Url.Action("Delete", new { id = item.IDMatHang })" class="btn btn-sm btn-danger">
+                        <i class="fa fa-trash"></i> 
+                    </a>
+                </td>
+
+            </tr>
+        }
+    </tbody>
+</table>
+<div class="product__pagination">
+    Trang @(Model.PageCount < Model.PageNumber ? 0 : Model.PageNumber)/@Model.PageCount
+    <div class="MenuTrang">
+        @Html.PagedListPager(Model, page => Url.Action("Index", new { page = page }))
+    </div>
+
+</div>

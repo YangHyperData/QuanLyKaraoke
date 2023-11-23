@@ -1,0 +1,125 @@
+﻿
+@{
+    ViewBag.Title = "Details";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+@model QLKaraoke.Models.TinTuc
+
+<h2 style="text-align:center; font-size: 24px; font-weight: bold;">@Html.Raw(@Model.TieuDe)</h2>
+
+<div class="details-container">
+    <div class="image-container">
+        <img style="margin-left:100px;" src="@Url.Content("~/Areas/Admin/assets/img/" + Model.Hinhanh)" alt="" />
+
+    </div>
+    @if (Model.TrangThaiTin == 2)
+    {
+        <div class="text-container">
+
+
+            <p><strong>Tên Chức Vụ:</strong> @Model.ChucVu.TenChucVu</p>
+            <p><strong>Số Lương:</strong> @Model.Soluong</p>
+            <p><strong>Mức Lương:</strong>@string.Format("{0:0,0} đ", Model.Luong)</p>
+
+
+
+        </div>
+    }
+
+</div>
+
+    <div class="text-container"  style="margin-left:100px">
+        <strong>Nội Dung:</strong>
+        <p>@Html.Raw(@Model.NoiDung)</p>
+        <p style="float:right"><strong>Ngày:</strong> @Model.Ngay.Value.ToString("dd/MM/yyyy")</p>
+    </div>
+    @if (Model.TrangThaiTin == 2)
+    {
+        <a href="@Url.Action("Job", "News", new { @id = Model.Id })" class="btn btn-primary" data-method="get">Ứng Tuyển</a>
+    }
+
+
+
+    <style>
+        .btn {
+            background-color: #4CAF50;
+            border: none;
+            color: white;
+            padding: 10px 20px;
+            text-align: center;
+            text-decoration: none;
+            display: inline-block;
+            font-size: 16px;
+            margin: 4px 2px;
+            cursor: pointer;
+        }
+
+        .btn {
+            position: fixed;
+            bottom: 20px;
+            right: 20px;
+            padding: 10px 20px;
+            font-size: 16px;
+            background-color: #4CAF50;
+            color: #fff;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+
+            .btn:hover {
+                background-color: #3e8e41;
+            }
+
+
+        /* Căn giữa tiêu đề */
+        h2 {
+            text-align: center;
+            font-size: 24px;
+            font-weight: bold;
+            margin-bottom: 20px;
+        }
+
+        /* Khu vực hiển thị chi tiết */
+        .details-container {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 20px;
+        }
+
+        /* Ảnh */
+        .image-container img {
+            max-width: 100%;
+            height: auto;
+            margin: auto;
+        }
+
+        /* Nội dung chi tiết */
+        .text-container {
+            max-width: 90%;
+            padding: 20px;
+            box-sizing: border-box;
+            background-color: #f7f7f7;
+            box-shadow: 0 0 5px rgba(0, 0, 0, 0.3);
+        }
+
+            /* Tiêu đề Nội dung */
+            .text-container strong {
+                margin-bottom: 10px;
+                font-weight: bold;
+            }
+
+            /* Mô tả ngắn */
+            .text-container p {
+                max-width: 500ch;
+                margin-bottom: 10px;
+            }
+
+                /* Ngày */
+                .text-container p:last-child {
+                    margin-bottom: 0;
+                }
+    </style>

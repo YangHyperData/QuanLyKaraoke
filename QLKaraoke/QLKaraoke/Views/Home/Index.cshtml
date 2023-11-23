@@ -1,0 +1,157 @@
+﻿@{
+    ViewBag.Title = "Home Page";
+}
+<div class="hero_area" style="background-color:black">
+    <div class="hero_social " style="background-color:black">
+        <a href="">
+            <i class="fa fa-facebook" aria-hidden="true"></i>
+        </a>
+        <a href="">
+            <i class="fa fa-twitter" aria-hidden="true"></i>
+        </a>
+        <a href="">
+            <i class="fa fa-linkedin" aria-hidden="true"></i>
+        </a>
+        <a href="">
+            <i class="fa fa-instagram" aria-hidden="true"></i>
+        </a>
+    </div>
+
+    <section class="slider_section " style="background :linear-gradient(to right, #333399,#ff00cc) ">
+        <div id="customCarousel1" class="carousel slide" data-ride="carousel">
+            <div class="carousel-inner">
+                <div class="carousel-item active">
+                    <div class="container-fluid ">
+                        <div class="row">
+                            <div class="col-md-6">
+                                <div class="detail-box">
+                                    <h1>
+                                        Smart Karaoke
+                                    </h1>
+                                    <p>
+                                        Smart kara nơi tận hưởng âm nhạc của bạn.
+                                    </p>
+                                    <div class="btn-box">
+                                        <a href="/Home/Contact" class="btn1 primary big">
+                                            Liên Hệ
+                                        </a>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <div class="img-box">
+                                    <img src="~/Asset/Img/rsz_hero-11.jpg" alt="" class="imgchage">
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="carousel-item ">
+                    <div class="container-fluid ">
+                        <div class="row">
+                            <div class="col-md-6">
+                                <div class="detail-box">
+                                    <h1>
+                                        Smart Karaoke
+                                    </h1>
+                                    <p>
+                                        Smart kara nơi tận hưởng âm nhạc của bạn.
+                                    </p>
+                                    <div class="btn-box">
+                                        <a href="/Home/Contact" class="btn1 primary big">
+                                            Liên Hệ
+                                        </a>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <div class="img-box">
+
+                                    <img src="~/Asset/Img/work-7.jpg" alt="">
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="carousel-item ">
+                    <div class="container-fluid ">
+                        <div class="row">
+                            <div class="col-md-6">
+                                <div class="detail-box">
+                                    <h1>
+                                        Smart Karaoke
+                                    </h1>
+                                    <p>
+                                        Smart kara nơi tận hưởng âm nhạc của bạn.
+                                    </p>
+                                    <div class="btn-box ">
+                                        <a href="/Home/Contact" class="btn1 primary big ">
+                                            Liên Hệ
+                                        </a>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <div class="img-box" width="300%" height="600%">
+                                    <img src="~/Asset/Img/rsz_46b1a5c7bd5c4083e5ca95737ccc9334.jpg" alt="">
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <ol class="carousel-indicators">
+                <li data-target="#customCarousel1" data-slide-to="0" class="active"></li>
+                <li data-target="#customCarousel1" data-slide-to="1"></li>
+                <li data-target="#customCarousel1" data-slide-to="2"></li>
+            </ol>
+        </div>
+
+    </section>
+</div>
+<section class="shop_section layout_padding">
+
+
+
+
+    @Html.Action("LatestServices", "Home")
+
+
+
+</section>
+
+<section class="feature_section layout_padding">
+    @Html.Action("_Room", "Home")
+</section>
+
+<h2 class="page-heading">Bình Luận</h2>
+
+<style>
+    .page-heading {
+        font-size: 24px;
+        font-weight: bold;
+        margin-bottom: 20px;
+    }
+
+    .comment-wrapper {
+        max-width: 100%;
+        margin-top: 30px;
+        padding: 10px;
+        background-color: #f5f5f5;
+        border-radius: 10px;
+    }
+
+    .fb-comments {
+        width: 100% !important;
+    }
+
+    .fb_iframe_widget span {
+        width: 100% !important;
+    }
+</style>
+<div class="comment-wrapper">
+    <div class="fb-comments" data-href="https://localhost:44312/" data-width="100%" data-numposts="10"></div>
+</div>
+
+<div id="fb-root"></div>
+<script async defer crossorigin="anonymous" src="https://connect.facebook.net/vi_VN/sdk.js#xfbml=1&version=v16.0" nonce="YPvNBz3v"></script>

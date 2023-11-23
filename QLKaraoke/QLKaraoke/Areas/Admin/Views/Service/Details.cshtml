@@ -1,0 +1,90 @@
+﻿@model QLKaraoke.Models.DichVu1
+
+@{
+    ViewBag.Title = "Chi Tiết - " + Model.Ten;
+    Layout = "~/Areas/Admin/Views/Shared/_LayoutAdmin.cshtml";
+}
+
+<div class="container">
+    <h4>Thông tin chi tiết-@Model.Ten</h4>
+    <hr />
+    <dl class="row">
+        <dt class="col-sm-3">
+           Đơn vị tính
+        </dt>
+        <dd class="col-sm-9">
+            @Html.DisplayFor(model => model.DonViTinh.TenDonVi)
+        </dd>
+        <dt class="col-sm-3">
+           Đơn giá
+        </dt>
+        <dd class="col-sm-9">
+            <td>@string.Format("{0:0,0} đ", Model.DonGia)</td>
+        </dd>
+
+       
+
+        <dt class="col-sm-3">
+            Số lượng
+        </dt>
+        <dd class="col-sm-9">
+            @Html.DisplayFor(model => model.SoLuong)
+        </dd>
+
+        <dt class="col-sm-3">
+            Tiền lời
+        </dt>
+        <dd class="col-sm-9">
+            <td>@string.Format("{0:0,0} đ", Model.GiaBan)</td>
+        </dd>
+
+        <dt class="col-sm-3">
+           Gía Bán
+        </dt>
+        <dd class="col-sm-9">
+            <td>@string.Format("{0:0,0} đ", Model.TongGia)</td>
+        </dd>
+
+        <dt class="col-sm-3">
+           Đã bán
+        </dt>
+        <dd class="col-sm-9">
+            @Html.DisplayFor(model => model.DaBan)
+        </dd>
+
+        <dt class="col-sm-3">
+           Hình
+        </dt>
+        <dd class="col-sm-9">
+            @if (!string.IsNullOrEmpty(Model.HinhAnh))
+            {
+                <img src="@Url.Content("~/Areas/Admin/assets/img/" + Model.HinhAnh)" class="img-thumbnail" />
+            }
+            else
+            {
+                <p>No image available</p>
+            }
+        </dd>
+    </dl>
+</div>
+<div class="form-group">
+    <div class="col-md-offset-2 col-md-10">
+        @Html.ActionLink("Chỉnh sửa", "Edit", new { id = Model.IDDichVu }, new { @class = "btn btn-primary" })
+        @Html.ActionLink("Quay lại danh sách", "Index", new { area = "Admin" }, new { @class = "btn btn-default" })
+    </div>
+</div>
+<style>
+    .dl-horizontal dt {
+        text-align: left;
+        width: 150px;
+    }
+
+    .dl-horizontal dd {
+        margin-left: 0;
+    }
+</style>
+<script>
+    $(document).ready(function () {
+        $('dt:empty').remove();
+    });
+</script> 

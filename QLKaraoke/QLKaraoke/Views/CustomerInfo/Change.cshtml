@@ -1,0 +1,51 @@
+﻿@model QLKaraoke.Models.KhachHangg
+@{
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<!DOCTYPE html>
+
+<html>
+<head>
+    <meta name="viewport" content="width=device-width" />
+    <title>Change Password</title>
+</head>
+<body>
+    <div>
+        @using (Html.BeginForm("Change", "CustomerInfo", FormMethod.Post, new { @class = "form-horizontal", role = "form" }))
+        {
+            @Html.AntiForgeryToken()
+            @Html.ValidationSummary()
+        <div class="form-horizontal">
+            <hr />
+
+            <div class="row mb-3">
+                <label for="currentPassword" class="col-md-4 col-lg-3 col-form-label">Mật Khẩu Cũ:</label>
+                <div class="col-md-8 col-lg-9">
+                    <input style="width: 400px; margin-left: 3%" name="currentPassword" type="password" class="form-control" id="currentPassword" required>
+                </div>
+            </div>
+
+            <div class="row mb-3">
+                <label for="newPassword" class="col-md-4 col-lg-3 col-form-label">Mật Khẩu Mới:</label>
+                <div class="col-md-8 col-lg-9">
+                    <input style="width: 400px; margin-left: 3%" name="newPassword" type="password" class="form-control" id="newPassword" required>
+                </div>
+            </div>
+
+            <div class="row mb-3">
+                <label for="renewPassword" class="col-md-4 col-lg-3 col-form-label">Nhập Lại Mật Khẩu:</label>
+                <div class="col-md-8 col-lg-9" >
+                    <input style="width:400px ; margin-left: 3%" name="confirmNewPassword" type="password" class="form-control" id="confirmNewPassword" required>
+                </div>
+            </div>
+            <hr />
+            <div class="form-group">
+                <input type="submit" value="Lưu" class="btn btn-success" />
+                @Html.ActionLink("Hủy", "Index", null, new { @class = "btn btn-dark" })
+            </div>
+        </div>
+        }
+    </div>
+</body>
+</html>

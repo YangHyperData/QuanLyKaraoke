@@ -1,0 +1,55 @@
+﻿@model QLKaraoke.Models.GiammGia
+
+@{
+    ViewBag.Title = "Delete";
+    Layout = "~/Areas/Admin/Views/Shared/_LayoutAdmin.cshtml";
+}
+
+<div class="container mt-5">
+    <div class="row">
+        <div class="col-md-6 mx-auto">
+            <div class="card">
+                <div class="card-header bg-danger text-white">
+                    <h3 class="card-title">XÓA ƯU ĐÃI</h3>
+                </div>
+                <div class="card-body">
+                    <p>Bạn có chắc chắn muốn xóa ưu đãi này?</p>
+                    <dl class="dl-horizontal">
+                        <dt>
+                            Số tiền:
+                        </dt>
+                        <dd>
+                            @Html.DisplayFor(model => model.SoTien, new { @class = "font-weight-bold" })
+                        </dd>
+
+                        <dt>
+                            Mã Code:
+                        </dt>
+
+                        <dd>
+                            @Html.DisplayFor(model => model.code, new { @class = "font-weight-bold" })
+                        </dd>
+
+                        <dt>
+                            Số lượng:
+                        </dt>
+
+                        <dd>
+                            @Html.DisplayFor(model => model.Soluong, new { @class = "font-weight-bold" })
+                        </dd>
+                    </dl>
+
+                    @using (Html.BeginForm())
+                    {
+                        @Html.AntiForgeryToken()
+
+                        <div class="form-actions no-color">
+                            <input type="submit" value="Xóa" class="btn btn-danger" />
+                            @Html.ActionLink("Hủy", "Index", null, new { @class = "btn btn-secondary" })
+                        </div>
+                    }
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

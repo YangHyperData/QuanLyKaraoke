@@ -1,0 +1,69 @@
+﻿@using QLKaraoke.Models;
+@using System.Data.Entity;
+@{
+    QLKARAOKEEntities db = new QLKARAOKEEntities();
+    var topCustomers = db.KhachHanggs
+        .Where(kh => kh.DatPhongs.Any(dp => dp.TrangThai == 1))
+        .OrderByDescending(kh => kh.DatPhongs
+            .Where(dp => dp.TrangThai == 1)
+            .Sum(dp => dp.ThanhTien))
+        .Take(5)
+        .Select(kh => new
+        {
+            KhachHang = kh,
+            SoLuongHoaDon = kh.DatPhongs.Count(dp => dp.TrangThai == 1),
+            TongGiaTriHoaDon = kh.DatPhongs.Where(dp => dp.TrangThai == 1)
+                                           .Sum(dp => dp.ThanhTien)
+        })
+        .ToList();
+}
+<div class="col-12">
+    <div class="card recent-sales overflow-auto">
+        <div class="filter">
+            <a class="icon" href="#" data-bs-toggle="dropdown"><i class="bi bi-three-dots"></i></a>
+            <ul class="dropdown-menu dropdown-menu-end dropdown-menu-arrow">
+                <li class="dropdown-header text-start">
+                    <h6>Filter</h6>
+                </li>
+                <li><a class="dropdown-item" href="#">Today</a></li>
+                <li><a class="dropdown-item" href="#">This Month</a></li>
+                <li><a class="dropdown-item" href="#">This Year</a></li>
+            </ul>
+        </div>
+
+        <div class="card-body">
+            <h5 class="card-title">Top Khách Hàng</h5>
+
+            <table class="table table-borderless datatable">
+                <thead>
+                    <tr>
+                        <th> STT</th>
+                        <th scope="col">Tên Khách</th>
+                        <th scope="col">SĐT</th>
+                        <th scope="col">Số Lượng Đơn</th>
+                        <th scope="col">Tổng Tiền</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @{int stt = 1;}
+                    @foreach (var customer in topCustomers)
+                    {
+                        <tr>
+
+                            <td>
+                                @(stt++)
+                            </td>
+                            <td>
+                                @(customer.KhachHang.Name)
+                            </td>
+                            <td>@(customer.KhachHang.Phone)</td>
+                            <td>@customer.SoLuongHoaDon</td>
+                            <td>@string.Format("{0:0,0} đ ", @customer.TongGiaTriHoaDon)</td>
+                        </tr>
+                    }
+
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>

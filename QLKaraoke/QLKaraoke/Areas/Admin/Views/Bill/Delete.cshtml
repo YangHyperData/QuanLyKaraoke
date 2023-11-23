@@ -1,0 +1,89 @@
+﻿@model QLKaraoke.Models.HOADON
+
+@{
+    ViewBag.Title = "Delete";
+    Layout = "~/Areas/Admin/Views/Shared/_LayoutAdmin.cshtml";
+}
+
+<h3>Are you sure you want to delete this?</h3>
+<div>
+    <h4>HOADON</h4>
+    <hr />
+    <dl class="dl-horizontal">
+    
+        <dt>
+            @Html.DisplayNameFor(model => model.ThoiGianBatDau)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.ThoiGianBatDau)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.ThoiGianKetThuc)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.ThoiGianKetThuc)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.ThanhTien)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.ThanhTien)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.NoiDung)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.NoiDung)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.TienDv)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.TienDv)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.TienGG)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.TienGG)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.TienPhong)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.TienPhong)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.DatPhong.MaGG)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.DatPhong.MaGG)
+        </dd>
+
+    </dl>
+
+    @using (Html.BeginForm())
+    {
+        @Html.AntiForgeryToken()
+
+        <div class="form-actions no-color">
+            <input type="submit" value="Delete" class="btn btn-default" /> |
+            @Html.ActionLink("Back to List", "Index")
+        </div>
+    }
+</div>

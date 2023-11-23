@@ -1,0 +1,51 @@
+﻿@model QLKaraoke.Models.KhoHang
+
+@{
+    ViewBag.Title = "Delete";
+    Layout = "~/Areas/Admin/Views/Shared/_LayoutAdmin.cshtml";
+}
+<div class="pagetitle">
+    <nav>
+        <ol class="breadcrumb">
+            <li class="breadcrumb-item"><a href="/admin/home/index">Home</a></li>
+            <li class="breadcrumb-item">Depot</li>
+            <li class="breadcrumb-item active">Delete</li>
+        </ol>
+    </nav>
+</div>
+@if (TempData["Er"] != null)
+{
+    <div class="alert alert-danger">@TempData["Er"].ToString()</div>
+}
+
+<h3>Are you sure you want to delete this?</h3>
+<hr />
+<dl class="dl-horizontal">
+    <dt>Tên Mặt Hàng:</dt>
+    <dd>@Html.DisplayFor(model => model.TenMatHang)</dd>
+    <dt>Đơn Gía</dt>
+    <dd>@Html.DisplayFor(model => model.DonGia)</dd>
+
+    <dt>Số Lượng</dt>
+    <dd>@Html.DisplayFor(model => model.SoLuong)</dd>
+
+    <dt>Ngày Cập Nhật:</dt>
+    <dd>@Model.NgayCapNhat.Value.ToString("dd/MM/yyyy")</dd>
+
+    <dt>Tổng Gía:</dt>
+    <dd>@Html.DisplayFor(model => model.TongGia)</dd>
+
+    <dt>Đơn Vị Tính:</dt>
+    <dd>@Html.DisplayFor(model => model.DonViTinh.TenDonVi)</dd>
+
+    <dt>Loại:</dt>
+    <dd>@Html.DisplayFor(model => model.LoaiDV1.TenDV)</dd>
+</dl>
+@using (Html.BeginForm())
+{
+    @Html.AntiForgeryToken()
+<div class="form-actions no-color">
+    <input type="submit" value="Xóa" class="btn btn-danger" /> |
+    @Html.ActionLink("Quay lại danh sách", "Index")
+</div>
+}

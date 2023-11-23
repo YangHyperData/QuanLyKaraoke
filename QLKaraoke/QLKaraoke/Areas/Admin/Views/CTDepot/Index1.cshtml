@@ -1,0 +1,121 @@
+﻿@using System.Web;
+@using System.Web.Mvc;
+@using PagedList.Mvc;
+@model PagedList.PagedList<QLKaraoke.Models.CTKhoHang>
+
+@{
+    ViewBag.Title = "Index";
+    Layout = "~/Areas/Admin/Views/Shared/_LayoutAdmin.cshtml";
+}
+
+@using (Html.BeginForm("Index1", "CTDepot", FormMethod.Get))
+{
+    <div class="row justify-content-between">
+        <div class="col-md-4">
+            <div class="form-group">
+                <div class="input-group">
+
+                    <select name="searchType" id="searchType" class="form-control form-control-sm">
+                        <option value="date">Tìm kiếm theo ngày</option>
+
+                        <option value="Ten">Tìm kiếm theo tên</option>
+
+                    </select>
+                    <input type="date" name="Ngay" class="form-control form-control-sm datepicker" id="datepicker" value="@ViewBag.Ngay" />
+
+                    <input type="text" name="ten" class="form-control form-control-sm" placeholder="Nhập tên" style="display:none" />
+
+                    <div class="input-group-append">
+                        <button type="submit" class="btn btn-sm btn-primary">
+                            <i class="fa fa-search"></i>
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-4 text-right">
+            <div class="form-group">
+                <div class="input-group">
+                    <a href="@Url.Action("Index")" class="btn btn-sm btn-success">Nhập Kho </a>
+                    
+                </div>
+            </div>
+        </div>
+    </div>
+    <script>
+        $(function () {
+
+            $('#searchType').change(function () {
+                var selectedValue = $(this).val();
+                if (selectedValue == 'date') {
+                    $('input[name="Ngay"]').show();
+
+                    $('input[name="ten"]').hide();
+
+                }
+                else  {
+                    $('input[name="Ngay"]').hide();
+
+                    $('input[name="ten"]').show();
+
+                }
+
+            });
+        });
+    </script>
+}
+<table class="table">
+    <thead>
+        <tr>
+            <th>STT</th>
+            <th>Tên Sản Phẩm</th>
+            <th>Số Lượng Xuất</th>
+            <th>Tổng</th>
+            <th>Trạng Thái</th>
+            <th>Ngày</th>
+            <th>Giờ Xuất</th>
+            <th>Đơn Gía</th>
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var item in Model.Select((value, index) => new { index = index + 1, value }))
+        {
+            <tr>
+                <td>@item.index</td>
+                <td>@item.value.TenSP</td>
+                <td>@item.value.SoLuong: @item.value.KhoHang.DonViTinh.TenDonVi</td>
+                <td>@item.value.ConLai</td>
+                @if (item.value.TrangThai == true)
+                {
+                    <td style="padding: 8px; color:green"><span class="text-green">Xuất Kho</span></td>
+                }
+
+                else
+                {
+                    <td style="padding: 8px; color:blue"><span class="text-green">Nhập Kho</span></td>
+                }
+                <td>@item.value.Ngay.Value.ToString("dd/MM/yyyy")</td>
+                <td>@item.value.Gio.Value.ToString()</td>
+
+                <td>@string.Format("{0:0,0} đ", item.value.KhoHang.DonGia)</td>
+                <td>
+
+                    <a href="@Url.Action("Delete", new { id = item.value.Id })" class="btn btn-danger btn-sm" onclick="return confirm('Bạn có chắc muốn xóa?');">
+                        <i class="fas fa-trash-alt"></i>
+                    </a>
+
+
+
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>
+<div class="product__pagination">
+    Trang @(Model.PageCount < Model.PageNumber ? 0 : Model.PageNumber)/@Model.PageCount
+    <div class="MenuTrang">
+        @Html.PagedListPager(Model, page => Url.Action("Index", new { page = page }))
+    </div>
+
+</div>

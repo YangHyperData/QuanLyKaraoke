@@ -1,0 +1,97 @@
+﻿@model Tuple<QLKaraoke.Models.TinTuc, QLKaraoke.Models.NhanVien, QLKaraoke.Models.KhachHangg>
+@{
+    ViewBag.Title = "Job";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<style>
+    table {
+        border-collapse: collapse;
+        width: 100%;
+    }
+
+    th, td {
+        padding: 8px;
+        text-align: left;
+        border-bottom: 1px solid #ddd;
+    }
+
+    tr:hover {
+        background-color: #f5f5f5;
+    }
+
+    .card {
+        border: 1px solid #ddd;
+        border-radius: 5px;
+        margin-bottom: 20px;
+    }
+
+    .card-body {
+        padding: 20px;
+    }
+</style>
+
+
+@using (Html.BeginForm("Job", "News", FormMethod.Post, new { @class = "form" }))
+{
+    @Html.ValidationSummary()
+    <div class="container-fluid">
+        <div class="row d-flex justify-content-center align-items-center">
+            <div class="col-md-6">
+                <h2 class="title">Thông tin </h2>
+                <div class="card">
+                    <div class="card-body">
+                        <table class="table">
+                            <tr>
+                                <td>
+                                    <label class="form-label">Hình ảnh</label>
+                                    <input type="file" name="HinhAnh" accept="image/*" class="form-control" />
+                                </td>
+                            </tr>
+                            <tr>
+                                <th class="form-label">Họ và tên:</th>
+                                <td><input type="text" name="HoTenNV" value="@(@Model.Item2.HoTenNV ?? Model.Item3.Name)" class="form-control" /></td>
+                            </tr>
+                            <tr>
+                                <th class="form-label">Giới tính:</th>
+                                <td>
+                                    <select name="GioiTinh" class="form-select">
+                                        <option value="Nam" @(Model.Item2.GioiTinh == "Nam" ? "selected" : "")>Nam</option>
+                                        <option value="Nữ" @(Model.Item2.GioiTinh == "Nữ" ? "selected" : "")>Nữ</option>
+                                        <option value="Khác" @(Model.Item2.GioiTinh == "Khác" ? "selected" : "")>Khác</option>
+                                    </select>
+                                </td>
+                            </tr>
+
+                            <tr>
+                                <th class="form-label">Số điện thoại:</th>
+                                <td><input type="text" name="SDT" value="@(@Model.Item2.SDT ?? Model.Item3.Phone)" class="form-control" /></td>
+                            </tr>
+                            <tr>
+                                <th class="form-label">Email:</th>
+                                <td><input type="text" name="Email" value="@(@Model.Item2.Email ?? Model.Item3.Email)" class="form-control" /></td>
+                            </tr>
+
+                            <tr>
+                                <th class="form-label">Địa chỉ:</th>
+                                <td><input type="text" name="DiaChi" value="@(@Model.Item2.DiaChi ?? Model.Item3.Address)" class="form-control" /></td>
+                            </tr>
+                            <tr>
+                                <th class="form-label">Ngày sinh:</th>
+                                <td><input type="date" name="NgaySinh" value="@(@Model.Item2.NgaySinh?.ToString("yyyy/MM/dd"))" class="form-control datepicker" required /></td>
+                            </tr>
+
+
+                        </table>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+        <div class="text-center">
+            <button type="submit" class="btn btn-primary">Gửi</button>
+            <a href="@Url.Action("Details", "News", new { id = ViewBag.Ma })" class="btn btn-danger">Hủy</a>
+        </div>
+
+    </div>
+}

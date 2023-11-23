@@ -1,0 +1,81 @@
+﻿@model IEnumerable<QLKaraoke.Models.ChucVu>
+
+@{
+    ViewBag.Title = "Index";
+    Layout = "~/Areas/Admin/Views/Shared/_LayoutAdmin.cshtml";
+}
+
+<style>
+  
+    table {
+        border-collapse: collapse;
+        width: 100%;
+    }
+
+    th, td {
+        text-align: left;
+        padding: 8px;
+    }
+
+    tr:nth-child(even) {
+        background-color: #f2f2f2;
+    }
+
+    th {
+        background-color: #4CAF50;
+        color: white;
+    }
+
+    .action-links {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+    }
+
+        .action-links a {
+            margin-right: 10px;
+        }
+</style>
+
+
+<div class="pagetitle">
+    <nav>
+        <ol class="breadcrumb">
+            <li class="breadcrumb-item"><a href="/admin/home/index">Home</a></li>
+            <li class="breadcrumb-item">Duty</li>
+            <li class="breadcrumb-item active">Index</li>
+        </ol>
+    </nav>
+</div>
+<p>
+    <a href="@Url.Action("Create")" class="btn btn-sm btn-success"><i class="fa fa-plus"></i> </a>
+</p>
+<table>
+    <tr>
+        <th>STT</th>
+        <th>Tên chức vụ</th>
+        <th>Ngày cập nhật</th>
+        <th>Lương chức vụ</th>
+        <th></th>
+    </tr>
+    @{int stt = 1;}
+    @foreach (var item in Model)
+    {
+        <tr>
+            <td>@(stt++)</td>
+            <td>@Html.DisplayFor(modelItem => item.TenChucVu)</td>
+            <td>@item.NgayCapNhat.Value.ToString("dd/MM/yyyy")</td>
+            <td>@string.Format("{0:0,0} đ", item.LuongCV)</td>
+            <td class="action-links">
+                <a href="@Url.Action("Edit", new { id = item.IDChucVu })" class="btn btn-primary btn-sm">
+                    <i class="fas fa-pencil-alt"></i>
+                </a>
+                <a href="@Url.Action("Delete", new { id = item.IDChucVu })" class="btn btn-danger btn-sm" onclick="return confirm('Bạn có chắc muốn xóa?');">
+                    <i class="fas fa-trash-alt"></i>
+                </a>
+              
+            </td>
+        </tr>
+    }
+
+</table>

@@ -1,0 +1,52 @@
+﻿
+@{
+    ViewBag.Title = "Success1";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+@model Tuple<QLKaraoke.Models.NhanVien, QLKaraoke.Models.KhachHangg>
+
+<h2 style="text-align:center">Cảm ơn bạn @Model.Item2.Name đã nộp hồ sơ tuyển dụng</h2>
+
+<p style="text-align:center">Thông tin của bạn đã được ghi nhận. Chúng tôi sẽ liên hệ với bạn trong thời gian sớm nhất.</p>
+
+<div class="row d-flex justify-content-center align-items-center">
+    <div class="col-md-6">
+        <h4 style="text-align:center">Thông tin hồ sơ</h4>
+        <table class="table table-striped table-bordered">
+            <tr>
+                <th>Hình ảnh</th>
+                <td><img src="~/Areas/Admin/assets/img/@Model.Item1.HinhAnh" alt="@Model.Item1.HoTenNV" width="150" /></td>
+            </tr>
+            <tr>
+                <th>Họ và tên</th>
+                <td>@Model.Item1.HoTenNV</td>
+            </tr>
+            <tr>
+                <th>Ứng tuyển</th>
+                <td>@Model.Item1.ChucVu.TenChucVu</td>
+            </tr>
+            <tr>
+                <th>Lương</th>
+                <td> @string.Format("{0:0,0} đ", @Model.Item1.Luong)</td>
+            </tr>
+            <tr>
+                <th>Số điện thoại</th>
+                <td>@Model.Item1.SDT</td>
+            </tr>
+            <tr>
+                <th>Email</th>
+                <td>@Model.Item1.Email</td>
+            </tr>
+            <tr>
+                <th>Địa chỉ</th>
+                <td>@Model.Item1.DiaChi</td>
+            </tr>
+            <tr>
+                <th>Giới tính</th>
+                <td>@Model.Item1.GioiTinh</td>
+            </tr>
+
+        </table>
+    </div>
+</div>

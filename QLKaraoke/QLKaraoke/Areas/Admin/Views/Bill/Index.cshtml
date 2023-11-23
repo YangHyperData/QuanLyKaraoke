@@ -1,0 +1,133 @@
+﻿@using System.Web;
+@using System.Web.Mvc;
+@using PagedList.Mvc;
+@model PagedList.PagedList<QLKaraoke.Models.HOADON>
+
+@{
+    ViewBag.Title = "Index";
+    Layout = "~/Areas/Admin/Views/Shared/_LayoutAdmin.cshtml";
+}
+
+@using (Html.BeginForm("Index", "Bill", FormMethod.Get))
+{
+    <div class="row justify-content-between">
+        <div class="col-md-4">
+            <div class="form-group">
+                <div class="input-group">
+                    <a href="@Url.Action("Index","BookTickets")" class="btn btn-sm btn-success"><i class="fa fa-plus"></i></a>
+                    <select name="searchType" id="searchType" class="form-control form-control-sm">
+                        <option value="date">Tìm kiếm theo ngày</option>
+                        <option value="maDat">Tìm kiếm theo mã đặt</option>
+                        <option value="Ten">Tìm kiếm theo tên</option>
+                        <option value="Sdt">Tìm kiếm theo số điện thoại</option>
+                    </select>
+                    <input type="date" name="ngaytao" class="form-control form-control-sm datepicker" id="datepicker" value="@ViewBag.NgayTao" />
+                    <input type="text" name="madat" class="form-control form-control-sm" placeholder="Nhập mã đặt" style="display:none" />
+                    <input type="text" name="ten" class="form-control form-control-sm" placeholder="Nhập tên" style="display:none" />
+                    <input type="text" name="sdt" class="form-control form-control-sm" placeholder="Nhập số điện thoại" style="display:none;" />
+                    <div class="input-group-append">
+                        <button type="submit" class="btn btn-sm btn-primary">
+                            <i class="fa fa-search"></i>
+                        </button>
+
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <script>
+        $(function () {
+
+            $('#searchType').change(function () {
+                var selectedValue = $(this).val();
+                if (selectedValue == 'date') {
+                    $('input[name="ngaytao"]').show();
+                    $('input[name="madat"]').hide();
+                    $('input[name="ten"]').hide();
+                    $('input[name="sdt"]').hide();
+                } else if (selectedValue == 'maDat') {
+                    $('input[name="ngaytao"]').hide();
+                    $('input[name="madat"]').show();
+                    $('input[name="ten"]').hide();
+                    $('input[name="sdt"]').hide();
+                }
+                else if (selectedValue == 'Ten') {
+                    $('input[name="ngaytao"]').hide();
+                    $('input[name="madat"]').hide();
+                    $('input[name="ten"]').show();
+                    $('input[name="sdt"]').hide();
+                }
+                else {
+                    $('input[name="ngaytao"]').hide();
+                    $('input[name="madat"]').hide();
+                    $('input[name="ten"]').hide();
+                    $('input[name="sdt"]').show();
+                }
+            });
+        });
+    </script>
+}
+<table class="table">
+    <thead>
+        <tr>
+            <th>STT</th>
+            <th>Mã Đặt</th>
+            <th>Tên Phòng</th>
+            <th>Tên Khách Hàng</th>
+            <th>Thời Gian</th>
+            <th>Ngày</th>
+            <th>Trạng Thái</th>
+            <th>Thành Tiền</th>
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var item in Model.Select((value, index) => new { index = index + 1, value }))
+        {
+            <tr>
+                <td>@item.index</td>
+                <td>@item.value.DatPhong.MaDat</td>
+                <td>@item.value.TenP</td>
+                <td>@item.value.Tenkh</td>
+                <td>@item.value.ThoiGianBatDau-@item.value.ThoiGianKetThuc</td>
+                <td>@item.value.Ngay.Value.ToString("dd/MM/yyyy")</td>
+                @if (item.value.TrangThai == true)
+                {
+                    <td style="padding: 8px; color:green"><span class="text-green">Đã thanh toán</span></td>
+                }
+
+                else
+                {
+                    <td style="padding: 8px; color:red"><span class="text-green">Tạm tính</span></td>
+                }
+                <td>@string.Format("{0:0,0} đ", item.value.ThanhTien)</td>
+                <td>
+
+                    @if (item.value.TrangThai == true)
+                    {
+                        <a href="@Url.Action("Index", new { id = item.value.IDHoaDon })" class="btn btn-success btn-sm">
+                            <i class="fas fa-pencil-alt"></i> 
+                        </a>
+                    }
+                    else
+                    {
+                        <a href="@Url.Action("Edit", new { id = item.value.IDHoaDon })" class="btn btn-success btn-sm">
+                            <i class="fas fa-pencil-alt"></i> 
+                        </a>
+                    }
+                    <a href="@Url.Action("Details", new { id = item.value.IDHoaDon })" class="btn btn-primary btn-sm">
+                        <i class="far fa-eye"></i> 
+                    </a>
+
+                </td>
+                </tr>
+        }
+    </tbody>
+</table>
+<div class="product__pagination">
+    Trang @(Model.PageCount < Model.PageNumber ? 0 : Model.PageNumber)/@Model.PageCount
+    <div class="MenuTrang">
+        @Html.PagedListPager(Model, page => Url.Action("Index", new { page = page }))
+    </div>
+
+</div>

@@ -1,0 +1,168 @@
+﻿@using System.Web;
+@using System.Web.Mvc;
+@using PagedList.Mvc;
+@model PagedList.PagedList<QLKaraoke.Models.SuDungDichVu>
+
+@{
+    ViewBag.Title = "Index";
+    Layout = "~/Areas/Admin/Views/Shared/_LayoutAdmin.cshtml";
+}
+<div class="pagetitle">
+    <nav>
+        <ol class="breadcrumb">
+            <li class="breadcrumb-item"><a href="/admin/home/index">Home</a></li>
+            <li class="breadcrumb-item">UseService</li>
+            <li class="breadcrumb-item active">Index</li>
+        </ol>
+    </nav>
+</div>
+@using (Html.BeginForm("Index", "UseService", FormMethod.Get))
+{
+    <div class="row justify-content-between">
+        <div class="col-md-4">
+            <div class="form-group">
+                <div class="input-group">
+                    <a href="@Url.Action("Create")" class="btn btn-sm btn-success"><i class="fa fa-plus"></i> </a>
+                    <select name="searchType" id="searchType" class="form-control form-control-sm">
+                        <option value="date">Tìm kiếm theo ngày</option>
+                        <option value="maDat">Tìm kiếm theo mã đặt</option>
+                        <option value="Ten">Tìm kiếm theo tên</option>
+                        <option value="Sdt">Tìm kiếm theo số điện thoại</option>
+                    </select>
+                    <input type="date" name="ngaytao" class="form-control form-control-sm datepicker" id="datepicker" value="@ViewBag.ngaytao" />
+                    <input type="text" name="madat" class="form-control form-control-sm" placeholder="Nhập mã đặt" style="display:none" />
+                    <input type="text" name="ten" class="form-control form-control-sm" placeholder="Nhập tên" style="display:none" />
+                    <input type="text" name="sdt" class="form-control form-control-sm" placeholder="Nhập số điện thoại" style="display:none;" />
+                    <div class="input-group-append">
+                        <button type="submit" class="btn btn-sm btn-primary">
+                            <i class="fa fa-search"></i>
+                        </button>
+
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-4 text-right">
+            <div class="form-group">
+                <div class="input-group">
+                    <a href="@Url.Action("Index1")" class="btn btn-sm btn-success">Hoàn Thành</a>
+                </div>
+            </div>
+        </div>
+    </div>
+
+
+    <script>
+        $(function () {
+
+            $('#searchType').change(function () {
+                var selectedValue = $(this).val();
+                if (selectedValue == 'date') {
+                    $('input[name="ngaytao"]').show();
+                    $('input[name="madat"]').hide();
+                    $('input[name="ten"]').hide();
+                    $('input[name="sdt"]').hide();
+                } else if (selectedValue == 'maDat') {
+                    $('input[name="ngaytao"]').hide();
+                    $('input[name="madat"]').show();
+                    $('input[name="ten"]').hide();
+                    $('input[name="sdt"]').hide();
+                }
+                else if (selectedValue == 'Ten') {
+                    $('input[name="ngaytao"]').hide();
+                    $('input[name="madat"]').hide();
+                    $('input[name="ten"]').show();
+                    $('input[name="sdt"]').hide();
+                }
+                else {
+                    $('input[name="ngaytao"]').hide();
+                    $('input[name="madat"]').hide();
+                    $('input[name="ten"]').hide();
+                    $('input[name="sdt"]').show();
+                }
+            });
+        });
+    </script>
+}
+
+
+<div class="container-fluid">
+    <div class="row">
+        <div class="col-md-12">
+            <table class="table table-striped table-bordered table-hover">
+                <thead>
+                    <tr>
+                        <th>STT</th>
+                        <th>Tên Dịch Vụ</th>
+                        <th>Số Lượng</th>
+                        <th>Tên phòng</th>
+                        <td>Đơn Vị</td>
+                        <th>Thời gian</th>
+
+                        <th>Tổng tiền</th>
+                        <th>Tiếp Nhận</th>
+                        <th>Tên khách hàng</th>
+                        <th>Ngày</th>
+                        <th>Actions</th>
+                    </tr>
+                </thead>
+                @{int stt = 1;}
+
+                <tbody>
+                    @foreach (var item in Model)
+                    {
+                        <tr>
+                            <td>@(stt++)</td>
+                            <td>@item.Ten</td>
+                            <td>@item.SoLuong</td>
+                            <td>@item.DatPhong.TenPhong</td>
+                            <td>@item.TenDVT</td>
+                            <td>@item.DatPhong.TimeStar-@item.DatPhong.TimeEnd</td>
+                            <td>@string.Format("{0:0,0} đ", item.Gia * item.SoLuong)</td>
+                            <td>
+
+                                @if (item.TrangThai == false)
+                                {
+                                    <p style="color:red">Chưa giao</p>
+                                }
+                                else
+                                {
+                                    <p style="color:green">Đã giao</p>
+                                }
+                            </td>
+                            <th>@item.KhachHangg.Name</th>
+                            <td>@item.NgayTao.Value.ToString("dd/MM/yyyy")</td>
+                            <td>
+                                @if (item.TrangThai == true)
+                                {
+                                    <a href="@Url.Action("Index", new { id = item.ID })" class="btn btn-primary btn-sm">
+                                        <i class="fas fa-thumbs-up"></i>
+                                    </a>
+                                }
+                                else
+                                {
+                                    <a href="@Url.Action("Edit1", new { id = item.ID })" class="btn btn-primary btn-sm">
+                                        <i class="fas fa-thumbs-up"></i>
+                                    </a>
+                                }
+
+
+
+                                <a href="@Url.Action("Delete", new { id = item.ID })" class="btn btn-danger btn-sm" onclick="return confirm('Bạn có chắc muốn xóa?');">
+                                    <i class="fas fa-trash-alt"></i>
+                                </a>
+                            </td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+<div class="product__pagination">
+    Trang @(Model.PageCount < Model.PageNumber ? 0 : Model.PageNumber)/@Model.PageCount
+    <div class="MenuTrang">
+        @Html.PagedListPager(Model, page => Url.Action("Index", new { page = page }))
+    </div>
+
+</div>

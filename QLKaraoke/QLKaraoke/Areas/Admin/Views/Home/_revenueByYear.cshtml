@@ -1,0 +1,90 @@
+﻿@using QLKaraoke.Models;
+@using System.Data.Entity;
+@using System.Web.Script.Serialization;
+
+@{
+    QLKARAOKEEntities db = new QLKARAOKEEntities();
+    var thisYear = DateTime.Now.Year;
+    var revenueByYear = db.HOADONs.Where(i => i.Ngay.Value.Year == thisYear)
+
+        .GroupBy(i => i.Ngay.Value.Year)
+        .Select(g => new { Year = g.Key, Revenue = g.Sum(i => i.ThanhTien) })
+        .ToList();
+
+}
+<div class="col-12">
+    <div class="card">
+        <div class="filter">
+            <a class="icon" href="#" data-bs-toggle="dropdown"><i class="bi bi-three-dots"></i></a>
+            <ul class="dropdown-menu dropdown-menu-end dropdown-menu-arrow">
+                <li class="dropdown-header text-start">
+                    <h6>Filter</h6>
+                </li>
+                <li><a class="dropdown-item" href="#">This Year</a></li>
+                <li><a class="dropdown-item" href="#">Last Year</a></li>
+                <li><a class="dropdown-item" href="#">Custom Range</a></li>
+            </ul>
+        </div>
+        <div class="card-body">
+            <h5 class="card-title">Doanh Thu Theo Năm <span>/{@thisYear}</span></h5>
+
+            <!-- Line Chart -->
+            <div id="revenueByYearChart"></div>
+
+            <script>
+        document.addEventListener("DOMContentLoaded", () => {
+            new ApexCharts(document.querySelector("#revenueByYearChart"), {
+                series: [{
+                    name: 'Doanh Thu',
+                    data: @Html.Raw(new JavaScriptSerializer().Serialize(revenueByYear.Select(y => y.Revenue).ToList())),
+                }],
+                chart: {
+                    height: 350,
+                    type: 'line',
+                    toolbar: {
+                        show: false
+                    },
+                },
+                markers: {
+                    size: 4
+                },
+                colors: ['#2eca6a'],
+                fill: {
+                    type: "gradient",
+                    gradient: {
+                        shadeIntensity: 1,
+                        opacityFrom: 0.3,
+                        opacityTo: 0.4,
+                        stops: [0, 90, 100]
+                    }
+                },
+                dataLabels: {
+                    enabled: false
+                },
+                stroke: {
+                    curve: 'smooth',
+                    width: 2
+                },
+              xaxis: {
+                        type: 'category',
+                        categories: @Html.Raw(new JavaScriptSerializer().Serialize(revenueByYear.Select(y => y.Year).ToList())),
+                    },
+                tooltip: {
+                    y: {
+                        formatter: function (val) {
+                            return val.toLocaleString('vi-VN', {
+                                style: 'currency',
+                                currency: 'VND'
+                            });
+                        }
+                    }
+                }
+            }).render();
+        });
+            </script>
+            <!-- End Line Chart -->
+
+        </div>
+
+    </div>
+</div>

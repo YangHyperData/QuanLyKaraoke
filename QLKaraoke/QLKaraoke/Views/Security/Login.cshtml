@@ -1,0 +1,58 @@
+﻿@{
+    ViewBag.Title = "Login";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+
+@{
+    Session["CEmail"] = null;
+    Session["CName"] = null;
+    Session["CInfo"] = null;
+}
+<div class="container">
+    <div class="row justify-content-center">
+        <div class="col-lg-4 col-md-6 col-sm-8">
+            <div class="card mt-5">
+                <div class="card-body"
+
+                    <div id="LoginForm" class="LoginForm" style="background-color: deepskyblue">
+
+                        <h3 class="text-center font-weight-bold">Karaoke Login</h3>
+                        @using (Html.BeginForm("LoginToSystem", "Security", FormMethod.Post))
+                        {
+                            @Html.AntiForgeryToken() // this is for prevent CSRF attack
+                            @Html.ValidationSummary(true)
+                            <div class="form-group">
+                                <label for="" class="TitleAdmin">Email</label>
+                                <input type="text" class="form-control" name="CEmail" required />
+                            </div>
+                            <div class="form-group">
+                                <label for="" class="TitleAdmin">Mật Khẩu</label>
+                                <input type="password" class="form-control" name="CPassword" required />
+                            </div>
+
+                            <br />
+                            if (TempData["Error"] != null)
+                            {
+                                <div class="alert alert-danger">@TempData["Error"]</div>
+                            }
+                            <div class="form-group" style="width: 200px; margin-left: 20%; border-radius: 3%">
+                                <input type="submit" value="Đăng Nhập" class="btn btn-success w-100" />
+                            </div>
+                            <div class="form-group" style="width: 400px; margin-left: 20%; border-radius: 3%">
+                                <button type="button" style="width: 200px" class="btn btn-primary">
+                                    <a href="~/Security/Register" style="color: white">Đăng Ký</a>
+                                </button>
+                            </div>
+                        }
+                    </div>
+
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+
+

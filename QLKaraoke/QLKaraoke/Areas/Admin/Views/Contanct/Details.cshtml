@@ -1,0 +1,39 @@
+﻿@model QLKaraoke.Models.LienHe
+
+@{
+    ViewBag.Title = "Details";
+    Layout = "~/Areas/Admin/Views/Shared/_LayoutAdmin.cshtml";
+}
+
+<div class="container">
+    <h2 class="text-center">Thông tin liên hệ</h2>
+    <hr />
+    <div class="row">
+        <div class="col-md-6">
+            <div class="form-group">
+                <label for="tenKH">Tên khách hàng:</label>
+                <p>@Html.DisplayFor(model => model.TenKH)</p>
+            </div>
+            <div class="form-group">
+                <label for="noiDung">Nội dung:</label>
+                <p>@Html.Raw(@Model.NoiDung)</p>
+            </div>
+
+            <div class="form-group">
+                <label for="sdt">Số điện thoại:</label>
+                <p>@Html.DisplayFor(model => model.SDT)</p>
+            </div>
+            <div class="form-group">
+                <label for="email">Email:</label>
+                <p>@Html.DisplayFor(model => model.Email)</p>
+            </div>
+            <div class="form-group">
+                <label for="ngayLH">Ngày liên hệ:</label>
+                <p>@Html.DisplayFor(model => model.NgayLH)</p>
+            </div>
+            <div class="form-group">
+                <a href="@Url.Action("Index")" class="btn btn-primary">Quay lại danh sách</a>
+            </div>
+        </div>
+    </div>
+</div>

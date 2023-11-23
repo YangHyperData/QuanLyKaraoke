@@ -1,0 +1,152 @@
+﻿@model Tuple<QLKaraoke.Models.LichDatP, QLKaraoke.Models.DatPhong, QLKaraoke.Models.KhachHangg>
+@{
+    ViewBag.Title = "BookRoom1";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<style>
+    table {
+        border-collapse: collapse;
+        width: 100%;
+    }
+
+    th, td {
+        padding: 8px;
+        text-align: left;
+        border-bottom: 1px solid #ddd;
+    }
+
+    tr:hover {
+        background-color: #f5f5f5;
+    }
+
+    .card {
+        border: 1px solid #ddd;
+        border-radius: 5px;
+        margin-bottom: 20px;
+    }
+
+    .card-body {
+        padding: 20px;
+    }
+</style>
+
+
+@using (Html.BeginForm("BookRoom1", "Home", FormMethod.Post))
+{
+    @Html.ValidationSummary()
+    <div class="container-fluid">
+        <div class="row">
+            <div class="col-md-6">
+                <h2>Thông tin người đặt</h2>
+                <div class="card">
+                    <div class="card-body">
+                        <table>
+
+                            <tr>
+                                <th>Tên:</th>
+
+                                <td>@Model.Item3.Name</td>
+
+
+                            </tr>
+
+                            <tr>
+                                <th>Số điện thoại:</th>
+                                <td><input type="text" name="Sdt" value="@(@Model.Item2.Sdt ?? Model.Item3.Phone)" /></td>
+                            </tr>
+                            <tr>
+                                <th>Email:</th>
+                                <td><input type="text" name="Email" value="@(@Model.Item2.Email ?? Model.Item3.Email)" /></td>
+                            </tr>
+
+                            <tr>
+                                <th>Mã giảm giá:</th>
+                                <td><input type="text" name="MaGG" id="MaGG" value="@Model.Item2.MaGG" /></td>
+                            </tr>
+
+                        </table>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-6">
+                <h2>Thông tin đặt phòng</h2>
+                <div class="card">
+                    <div class="card-body">
+                        <table>
+                            <tr>
+                                <th>Phòng:</th>
+                                <td>@Model.Item1.Phong.TenPhong</td>
+                            </tr>
+                            <tr>
+                                <th>Loại phòng:</th>
+                                <td>@Model.Item1.Phong.LoaiPhong.TenPhong</td>
+                            </tr>
+                            <tr>
+                                <th>Ngày đặt:</th>
+                                <td>@Model.Item1.Ngay.Value.ToString("dd/MM/yyyy") </td>
+                            </tr>
+                            <tr>
+                                <th>Thời gian bắt đầu:</th>
+                                <td>@Model.Item1.TimeStar</td>
+                            </tr>
+                            <tr>
+                                <th>Thời gian kết thúc:</th>
+                                <td>@Model.Item1.TimeEnd </td>
+                            </tr>
+                            <tr>
+                                <th>Giờ sử dụng:</th>
+                                <td>@ViewBag.time</td>
+                            </tr>
+                            @if (Model.Item1.DaysOfWeek.Gia != null)
+                            {
+                                <tr>
+                                    <th>Tiền Ngày:</th>
+                                    <td>@string.Format("{0:0,0} đ", Model.Item1.DaysOfWeek.Gia)</td>
+                                </tr>
+                            }
+                            @if (Model.Item1.Phong.LoaiPhong.DonGia != null)
+                            {
+                                <tr>
+                                    <th>Tiền loại phòng:</th>
+                                    <td>@string.Format("{0:0,0} đ", Model.Item1.Phong.LoaiPhong.DonGia)</td>
+                                </tr>
+                            }
+                            <tr>
+                                <th>Tiền Gía 1 giờ:</th>
+                                <td>@string.Format("{0:0,0} đ", Model.Item1.Phong.DonGia)</td>
+                            </tr>
+                            <tr>
+                                <th>Tiền Gía @String.Format("{0:0.00}", (Model.Item1.TimeEnd.Value - Model.Item1.TimeStar.Value).TotalHours) giờ:</th>
+                                <td>@string.Format("{0:0,0} đ", Model.Item1.Phong.DonGia * (Model.Item1.TimeEnd.Value - Model.Item1.TimeStar.Value).TotalHours)</td>
+                            </tr>
+                       
+
+                            @if (ViewBag.TienNgay != null)
+                            {
+                                <tr>
+                                    <th>Tiền Ngày:</th>
+                                    <td>@string.Format("{0:0,0} đ", ViewBag.TienNgay)</td>
+                                </tr>
+                            }
+
+                            <tr>
+                                <th>Tổng tiền:</th>
+                                <td>@string.Format("{0:0,0} đ", Model.Item1.TongGia)</td>
+                            </tr>
+
+                        </table>
+                    </div>
+                </div>
+            </div>
+        
+            
+        </div>
+        <div class="text-center">
+            <button type="submit" class="btn btn-primary">Đặt phòng</button>
+            <a href="@Url.Action("RoomDetail", "Home", new { id = ViewBag.MaPhong })" class="btn btn-danger">Hủy</a>
+        </div>
+
+    </div>
+
+}

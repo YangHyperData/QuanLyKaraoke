@@ -1,0 +1,196 @@
+﻿@model List<QLKaraoke.Models.DaysOfWeek>
+@using System.Linq;
+@{
+    ViewBag.Title = "Index";
+    Layout = "~/Areas/Admin/Views/Shared/_LayoutAdmin.cshtml";
+}
+<div class="pagetitle">
+    <nav>
+        <ol class="breadcrumb">
+            <li class="breadcrumb-item"><a href="/admin/home/index">Home</a></li>
+            <li class="breadcrumb-item">DaysOfWeek</li>
+            <li class="breadcrumb-item active">Index</li>
+        </ol>
+    </nav>
+</div>
+<div class="container">
+    <h2 class="text-center">Days Of Week</h2>
+    <div class="row">
+        <div class="col-md-12">
+            <div class="table-responsive">
+                <table class="table table-striped">
+                    <thead>
+                        <tr>
+                            <th class="text-center">STT</th>
+                            <th class="text-center">Tên ngày trong tuần</th>
+                            <th class="text-center">Giá cộng thêm</th>
+                            <th class="text-center">Actions</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @foreach (var item in Model.Select((value, index) => new { index = (index + 1), value }))
+                        {
+                            <tr id="row_@item.value.ID">
+                                <td class="text-center">@item.index</td>
+                                <td class="text-center">@item.value.Name</td>
+                                <td class="text-center">@((item.value.Gia == 0) ? "Miễn phí" : string.Format("{0:#,##0 đ}", item.value.Gia))</td>
+                                <td class="text-center">
+                                    <a href="@Url.Action("Edit", "DaysOfWeek", new { id = item.value.ID })" class="btn btn-sm btn-info"><i class="fa fa-pencil-alt"></i> </a>
+                                </td>
+                            </tr>
+                        }
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>
+<!--Edit-->
+<!--Script-->
+@section Scripts {
+    <script>
+        function openEditingModal(itemId) {
+            var modal = $('#editing-modal');
+            var form = $('#editing-form');
+            var displayName = $('#txtDisplayNameEdit');
+            var name = $('#txtNameEdit');
+            var gia = $('input[name=Gia]');
+
+            // set the form action to the Edit action in the controller
+            form.attr('action', '/DaysOfWeek/CreateOrEdit');
+
+            // set the item ID in the form data
+            $('input[name=Id]').val(itemId);
+
+            // populate the form fields with the item data
+            displayName.val(''); // set the display name of the item
+            name.val(''); // set the name of the item
+            gia.val(''); // set the gia of the item
+
+            // show the modal
+            modal.modal('show');
+        }
+        $(document).ready(function () {
+
+
+        });
+
+        const baseUrl = "/admin/DaysOfWeek";
+        // Valid
+        const fields = {
+            Time: {
+                container: 'tooltip',
+                validators: {
+                    notEmpty: {
+                        message: 'The Time is required and cannot be empty'
+                    }
+                }
+            },
+            Price: {
+                container: 'tooltip',
+                validators: {
+                    notEmpty: {
+                        message: 'The Price is required and cannot be empty'
+                    }
+                }
+            }
+        }
+        validator.valid('editing-form', fields, (e) => {
+            e.preventDefault();
+            var formData = new FormData(document.getElementById("editing-form"));
+            ajax.createOrUpdate(`${baseUrl}/CreateOrEdit`, formData,
+                (response) => {
+                    if (response.status) {
+                        notify.push(response.mess, notify.EType.SUCCESS);
+                        notify.loading();
+
+                        $('#editing-modal').modal('hide');
+                        setTimeout(function () {
+                            window.location.href = window.location.pathname;
+                        }, 3000);
+                    } else {
+                        notify.push(response.mess, notify.EType.DANGER);
+                    }
+                },
+                (jqXHR, textStatus) => {
+                    const mess = `Request failed: ${textStatus}`;
+                    notify.push(mess, notify.EType.DANGER);
+
+                }
+            );
+
+        });
+        validator.valid('creation-form', fields, (e) => {
+            e.preventDefault();
+
+            var formData = new FormData(document.getElementById('creation-form'));
+            ajax.createOrUpdate(`${baseUrl}/CreateOrEdit`, formData,
+                (response) => {
+                    if (response.status) {
+                        notify.push(response.mess, notify.EType.SUCCESS);
+                        notify.loading();
+                        $('#editing-modal').modal('hide');
+                        setTimeout(function () {
+                            window.location.href = window.location.pathname;
+                        }, 3000);
+
+                    } else {
+                        notify.push(response.mess, notify.EType.DANGER);
+                    }
+                },
+                (jqXHR, textStatus) => {
+                    const mess = `Request failed: ${textStatus}`;
+                    notify.push(mess, notify.EType.DANGER);
+                }
+            );
+        });
+
+        //Edit
+        function openEditingModal(id) {
+            ajax.get(`${baseUrl}/GetJson`, { id: id },
+                (response) => {
+                    if (response.status) {
+                        const obj = response.data;
+                        console.log(obj);
+                        $('#editing-form input[name="Name"]').val(obj.Name);
+                        $('#editing-form input[name="DisplayName"]').val(obj.Name);
+                        $('#editing-form input[name="Price"]').val(obj.Price);
+                        $('#editing-form input[name="Id"]').val(obj.Id);
+                        $('#editing-modal').modal('show');
+                    } else {
+                        notify.push(response.mess, notify.EType.DANGER);
+                    }
+                },
+                (jqXHR, textStatus) => {
+                    const mess = `Request failed: ${textStatus}`;
+                    notify.push(mess, notify.EType.DANGER);
+
+                }
+            );
+        }
+
+        //Del
+        function deleteElement(_id, name) {
+            var mess = 'Xác nhận <b>xóa</b> bản ghi <b>' + name + '</b>';
+            bootbox.confirm(mess, function (result) {
+                if (result) {
+                    ajax.del(`${baseUrl}/del`,
+                        { id: _id },
+                        (response) => {
+                            if (response.status) {
+                                notify.push(response.mess, notify.EType.SUCCESS);
+                                $(`#row_${_id}`).remove();
+                            } else {
+                                notify.push(mess, notify.EType.DANGER);
+                            }
+                        },
+                        (jqXHR, textStatus) => {
+                            const mess = `Request failed: ${textStatus}`;
+                            notify.push(mess, notify.EType.DANGER);
+
+                        }
+                    );
+                }
+            });
+        }</script>
+}

@@ -1,0 +1,97 @@
+﻿@using QLKaraoke.Models
+@using System.Data.Entity;
+@{
+    QLKARAOKEEntities db = new QLKARAOKEEntities();
+    KhachHangg cust = (KhachHangg)Session["CInfo"];
+    int ID = Convert.ToInt32(cust.ID.ToString());
+    var currentMonth = DateTime.Today.Month;
+    var book = db.DatPhongs.Include(d => d.GiammGia).Include(d => d.KhachHangg).Include(d => d.HOADONs)
+        .Where(n => (n.TrangThai == 2 && n.IdKH == ID && (n.Ngay ?? DateTime.Today).Month == currentMonth))
+        .OrderByDescending(d => d.Ngay)
+        .ThenByDescending(d => d.Id).ThenByDescending(d => d.TimeStar)
+        .ToList();
+}
+@if (book.Count == 0)
+{
+    <text>
+        <h2 class="text-black-50 font-weight-bold text-center p-3">Đặt Phòng</h2>
+    </text>
+}
+else
+{
+    <text>
+        <div>
+            <table class="table table-striped">
+                    <tr>
+                        <th>
+                            Mã
+                        </th>
+                        <th>
+                            Phòng
+                        </th>
+                        <th>
+                            Loại Phòng
+                        </th>
+                        <th>
+                            Giờ
+                        </th>
+                        <th>
+                            Ngày
+                        </th>
+                        <th>
+                            Số Tiền
+                        </th>
+                        <th>
+                            Trạng Thái
+                        </th>
+                        <th></th>
+                    </tr>
+
+                @foreach (var item in book)
+                {
+                    <tr>
+                        <td>
+                            @item.MaDat
+                        </td>
+                        <td>
+                            @item.TenPhong
+                        </td>
+                        <td>
+                            @item.LoaiP
+                        </td>
+                        <td>
+                            @item.TimeStar-@item.TimeEnd
+                        </td>
+                        <td>
+                            @item.Ngay.Value.ToString("dd/MM/yyyy")
+                        </td>
+                        <td>@string.Format("{0:0,0} đ", item.ThanhTien)</td>
+                        <td>
+                            @if (item.TrangThaiNhan == false)
+                            {
+                                <span style="color: red;float:right">Chưa Hát</span>
+                            }
+                            else
+                            {
+                                <span style="color: green;float:right">Đang Hát</span>
+                            }
+                        </td>
+                        @if (item.TrangThaiNhan == true)
+                        {
+                            <td></td>
+                        }
+                        else
+                        {
+                            <td>
+                                @Html.ActionLink("Xóa", "Delete", new { id = item.Id }, new { @class = "btn btn-danger btn-sm", onclick = "return confirm('Bạn có chắc muốn xóa?');" })
+                            </td>
+                        }
+
+                    </tr>
+                }
+            </table>
+        </div>
+    </text>
+}
+
+

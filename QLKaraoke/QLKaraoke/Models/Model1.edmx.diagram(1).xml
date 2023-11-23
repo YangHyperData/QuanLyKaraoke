@@ -1,0 +1,61 @@
+<?xml version="1.0" encoding="utf-8"?>
+<edmx:Edmx Version="3.0" xmlns:edmx="http://schemas.microsoft.com/ado/2009/11/edmx">
+ <!-- EF Designer content (DO NOT EDIT MANUALLY BELOW HERE) -->
+  <edmx:Designer xmlns="http://schemas.microsoft.com/ado/2009/11/edmx">
+    <!-- Diagram content (shape and connector positions) -->
+    <edmx:Diagrams>
+      <Diagram DiagramId="1c611dbc45df41f8922363898fe3d064" Name="Diagram1">
+        <EntityTypeShape EntityType="QLKARAOKEModel.DichVu1" Width="1.5" PointX="8.25" PointY="0.75" IsExpanded="true" />
+        <EntityTypeShape EntityType="QLKARAOKEModel.DonViTinh" Width="1.5" PointX="6" PointY="5.875" IsExpanded="true" />
+        <EntityTypeShape EntityType="QLKARAOKEModel.GiammGia" Width="1.5" PointX="3" PointY="14.5" IsExpanded="true" />
+        <EntityTypeShape EntityType="QLKARAOKEModel.KhachHangg" Width="1.5" PointX="0.75" PointY="6.875" IsExpanded="true" />
+        <EntityTypeShape EntityType="QLKARAOKEModel.KhoHang" Width="1.5" PointX="6" PointY="1.5" IsExpanded="true" />
+        <EntityTypeShape EntityType="QLKARAOKEModel.LienHe" Width="1.5" PointX="12.75" PointY="1.75" IsExpanded="true" />
+        <EntityTypeShape EntityType="QLKARAOKEModel.LoaiDV" Width="1.5" PointX="3.75" PointY="2.375" IsExpanded="true" />
+        <EntityTypeShape EntityType="QLKARAOKEModel.LoaiPhong" Width="1.5" PointX="3" PointY="7.5" IsExpanded="true" />
+        <EntityTypeShape EntityType="QLKARAOKEModel.Phong" Width="1.5" PointX="3" PointY="10.375" IsExpanded="true" />
+        <EntityTypeShape EntityType="QLKARAOKEModel.SuDungDichVu" Width="1.5" PointX="10.5" PointY="9.125" IsExpanded="true" />
+        <EntityTypeShape EntityType="QLKARAOKEModel.Time" Width="1.5" PointX="3" PointY="18.5" IsExpanded="true" />
+        <AssociationConnector Association="QLKARAOKEModel.FK_DichVu1_DonViTinh" ManuallyRouted="false" />
+        <AssociationConnector Association="QLKARAOKEModel.FK_DichVu1_KhoHang" ManuallyRouted="false" />
+        <AssociationConnector Association="QLKARAOKEModel.FK_DichVu1_LoaiDV" ManuallyRouted="false" />
+        <AssociationConnector Association="QLKARAOKEModel.FK_GioHang_DichVu1" ManuallyRouted="false" />
+        <AssociationConnector Association="QLKARAOKEModel.FK_KhoHang_DonViTinh" ManuallyRouted="false" />
+        <AssociationConnector Association="QLKARAOKEModel.FK_GiammGia_KhachHangg" ManuallyRouted="false" />
+        <AssociationConnector Association="QLKARAOKEModel.FK_SuDungDichVu_KhachHangg" ManuallyRouted="false" />
+        <AssociationConnector Association="QLKARAOKEModel.FK_KhoHang_LoaiDV" ManuallyRouted="false" />
+        <AssociationConnector Association="QLKARAOKEModel.FK_Phong_LoaiPhong" ManuallyRouted="false" />
+        <EntityTypeShape EntityType="QLKARAOKEModel.DaysOfWeek" Width="1.5" PointX="9" PointY="19.75" />
+        <EntityTypeShape EntityType="QLKARAOKEModel.DatPhong" Width="1.5" PointX="13.5" PointY="10.75" />
+        <AssociationConnector Association="QLKARAOKEModel.FK_DatPhong_DaysOfWeeks" />
+        <AssociationConnector Association="QLKARAOKEModel.FK_DatPhong_GiammGia" />
+        <AssociationConnector Association="QLKARAOKEModel.FK_DatPhong_KhachHangg" />
+        <AssociationConnector Association="QLKARAOKEModel.FK_DatPhong_LoaiPhong" />
+        <AssociationConnector Association="QLKARAOKEModel.FK_DatPhong_Phong" />
+        <AssociationConnector Association="QLKARAOKEModel.FK_DatPhong_Time" />
+        <AssociationConnector Association="QLKARAOKEModel.FK_SuDungDichVu_DatPhong" />
+        <EntityTypeShape EntityType="QLKARAOKEModel.LichDatP" Width="1.5" PointX="11.25" PointY="14.125" />
+        <AssociationConnector Association="QLKARAOKEModel.FK_DatPhong_LichDatP" />
+        <AssociationConnector Association="QLKARAOKEModel.FK_LichDatP_DaysOfWeeks" />
+        <AssociationConnector Association="QLKARAOKEModel.FK_LichDatP_KhachHangg" />
+        <AssociationConnector Association="QLKARAOKEModel.FK_LichDatP_KhachHangg1" />
+        <AssociationConnector Association="QLKARAOKEModel.FK_LichDatP_LoaiPhong" />
+        <AssociationConnector Association="QLKARAOKEModel.FK_LichDatP_Phong" />
+        <EntityTypeShape EntityType="QLKARAOKEModel.ChucVu" Width="1.5" PointX="15.375" PointY="3.75" />
+        <EntityTypeShape EntityType="QLKARAOKEModel.NhanVien" Width="1.5" PointX="17.625" PointY="5.125" />
+        <AssociationConnector Association="QLKARAOKEModel.FK_NhanVien_ChucVu" />
+        <AssociationConnector Association="QLKARAOKEModel.FK_NhanVien_KhachHangg" />
+        <EntityTypeShape EntityType="QLKARAOKEModel.TinTuc" Width="1.5" PointX="17.625" PointY="0.75" />
+        <AssociationConnector Association="QLKARAOKEModel.FK_TinTuc_ChucVu" />
+        <AssociationConnector Association="QLKARAOKEModel.FK_NhanVien_TinTuc" />
+        <EntityTypeShape EntityType="QLKARAOKEModel.ThongTin" Width="1.5" PointX="0.75" PointY="0.75" />
+        <EntityTypeShape EntityType="QLKARAOKEModel.QuanLii" Width="1.5" PointX="10.375" PointY="5.75" />
+        <EntityTypeShape EntityType="QLKARAOKEModel.HOADON" Width="1.5" PointX="15.75" PointY="11.125" />
+        <AssociationConnector Association="QLKARAOKEModel.FK_HOADON_DatPhong1" />
+        <AssociationConnector Association="QLKARAOKEModel.FK_HOADON_SuDungDichVu" />
+        <EntityTypeShape EntityType="QLKARAOKEModel.CTKhoHang" Width="1.5" PointX="8.25" PointY="10" />
+        <AssociationConnector Association="QLKARAOKEModel.FK_CTKhoHang_KhoHang" />
+        </Diagram>
+    </edmx:Diagrams>
+  </edmx:Designer>
+</edmx:Edmx>

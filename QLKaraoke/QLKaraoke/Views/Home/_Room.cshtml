@@ -1,0 +1,69 @@
+﻿
+@model IEnumerable<QLKaraoke.Models.Phong>
+@{
+    ViewBag.Title = "_Room";
+    Layout = null;
+}
+
+<div class="container">
+    <div class="heading_container">
+        <h2>
+           Đặt Phòng
+        </h2>
+
+    </div>
+    <div class="row">
+      
+            @foreach (var item in Model)
+            {
+                <div class="col-sm-6 col-lg-3">
+                    <div class="box">
+                        <a href="@Url.Action("RoomDetail", "Home",new { id = item.IDPhong })">
+                            <div class="img-box">
+
+                            </div>
+                            <div class="detail-box">
+                                <h5>
+                                    @item.TenPhong
+                                </h5>
+                                <p>
+                                    @item.LoaiPhong.TenPhong
+                                </p>
+                                <p> Số Lượng: @item.SoLuongNguoi</p>
+                                @if (item.TrangThai == true)
+                                {
+                                    <p style="color:green">Hoạt Động </p>
+                                }
+                                else
+                                { <p style="color:red">Bảo Trì </p>}
+                                <span>
+                                    Gía: @string.Format("{0:0,0} đ", item.DonGia)
+                                </span>
+                                <i class="fa fa-long-arrow-right" aria-hidden="true"></i>
+
+                            </div>
+                        </a>
+                    </div>
+                </div>
+            }
+     
+        </div>
+    <div class="btn-box">
+        <a href="/home/room">
+            Xem Thêm
+        </a>
+    </div>
+</div>
+<style>
+    .box {
+        border-radius: 5px;
+        box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.2);
+        transition: all 0.3s ease-in-out;
+    }
+
+        .box:hover {
+            box-shadow: 0px 0px 15px rgba(0, 0, 0, 0.3);
+            transform: scale(1.05);
+        }
+
+</style>

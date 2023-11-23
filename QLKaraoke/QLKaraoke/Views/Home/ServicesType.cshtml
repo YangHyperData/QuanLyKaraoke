@@ -1,0 +1,169 @@
+﻿@using System.Web;
+@using System.Web.Mvc;
+@using PagedList.Mvc;
+@model PagedList.PagedList<QLKaraoke.Models.DichVu1>
+@{
+    ViewBag.Title = "Services";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<section class="shop_section layout_padding">
+    <style>
+        .box-container {
+            display: block;
+        }
+        .box {
+            border-radius: 5px;
+            box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.2);
+            transition: all 0.3s ease-in-out;
+        }
+
+            .box:hover {
+                box-shadow: 0px 0px 15px rgba(0, 0, 0, 0.3);
+                transform: scale(1.05);
+            }
+
+        .box {
+            width: 100%;
+            margin-bottom: 20px;
+            height: 300px;
+            border: 1px solid #ccc;
+            padding: 10px;
+            margin-right: 10px;
+            margin-bottom: 10px;
+        }
+
+        .sidebar {
+            background-color: none;
+            padding: 20px;
+            margin-bottom: 20px;
+        }
+
+        .sidebar__item h4 {
+            font-size: 18px;
+            font-weight: bold;
+            margin-bottom: 10px;
+        }
+
+        .sidebar__item ul {
+            list-style: none;
+            margin: 0;
+            padding: 0;
+        }
+
+            .sidebar__item ul li {
+                margin-bottom: 5px;
+            }
+
+                .sidebar__item ul li a {
+                    color: #333;
+                    text-decoration: none;
+                }
+
+                    .sidebar__item ul li a:hover {
+                        color: #666;
+                    }
+
+        .product__pagination {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            margin-top: 20px;
+        }
+
+        .MenuTrang {
+            display: inline;
+            text-align: center;
+            margin-left: 10px;
+        }
+
+        .product__pagination {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-top: 20px;
+            font-size: 16px;
+            color: #555;
+            font-weight: bold;
+        }
+
+        .MenuTrang {
+            display: inline;
+            text-align: center;
+            margin-left: 10px;
+        }
+
+            .MenuTrang a {
+                display: inline-block;
+                padding: 8px 12px;
+                margin-right: 5px;
+                border-radius: 4px;
+                background-color: #fff;
+                border: 1px solid #ccc;
+                color: #555;
+                transition: all 0.3s ease;
+            }
+
+                .MenuTrang a:hover {
+                    background-color: #555;
+                    color: #fff;
+                    border-color: #555;
+                }
+        .sidebar ul li.active a {
+            color: #fff;
+            background-color: #007bff;
+        }
+
+    </style>
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-3 col-md-5">
+                <div class="sidebar">
+                    <div class="sidebar__item">
+                        <h4>Loại Dịch Vụ</h4>
+                        <ul>
+
+                            @Html.Action("Categories", "Home")
+
+                        </ul>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-9">
+                <div class="heading_container heading_center">
+                    <h2>Dịch Vụ</h2>
+                </div>
+                <div class="row">
+                    @foreach (var item in Model)
+                    {
+                        <div class="col-sm-4 col-xl-4">
+                            <div class="box">
+                                <a href="@Url.Action("ProductDetail", "Home",new { id = item.IDDichVu })">
+                                    <div class="img-box">
+                                        <img style="width: 100%; height: 100%; object-fit: cover;" src="~/Areas/Admin/assets/img/@item.HinhAnh" alt="">
+                                    </div>
+                                    <div class="detail-box">
+                                        <h6>@item.Ten</h6>
+                                        <h6>
+                                            Gía:
+                                            <span>
+                                                <span>@string.Format("{0:0,0} đ", item.TongGia)</span>
+                                            </span>
+                                        </h6>
+                                    </div>
+                                </a>
+                            </div>
+                        </div>
+                    }
+                </div>
+                <div class="product__pagination">
+                    Trang @(Model.PageCount < Model.PageNumber ? 0 : Model.PageNumber)/@Model.PageCount
+                    <div class="MenuTrang">
+                        @Html.PagedListPager(Model, page => Url.Action("Services", new { page = page }))
+                    </div>
+
+                </div>
+            </div>
+        </div>
+    </div>
+</section>

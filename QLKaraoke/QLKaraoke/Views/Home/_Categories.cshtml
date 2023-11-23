@@ -1,0 +1,7 @@
+﻿
+@model List<QLKaraoke.Models.LoaiDV>
+
+@foreach (var category in Model)
+{
+    <li><a href="@Url.Action("ServicesType", "Home", new { id = category.ID })">@category.TenDV</a></li>
+}

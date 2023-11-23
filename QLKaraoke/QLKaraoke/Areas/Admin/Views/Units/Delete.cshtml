@@ -1,0 +1,50 @@
+﻿@model QLKaraoke.Models.DonViTinh
+
+@{
+    ViewBag.Title = "Delete";
+    Layout = "~/Areas/Admin/Views/Shared/_LayoutAdmin.cshtml";
+}
+
+<div class="pagetitle">
+    <nav>
+        <ol class="breadcrumb">
+            <li class="breadcrumb-item"><a href="/admin/home/index">Home</a></li>
+            <li class="breadcrumb-item">Units</li>
+            <li class="breadcrumb-item active">Delete</li>
+        </ol>
+    </nav>
+</div>
+@if (TempData["Er"] != null)
+{
+    <div class="alert alert-danger">
+        @TempData["Er"]
+    </div>
+}
+
+<h3>Are you sure you want to delete this?</h3>
+<div>
+    <hr />
+    <dl class="dl-horizontal">
+        <dt>
+            Tên Đơn Vị
+        </dt>
+        <dd>
+            @Html.DisplayFor(model => model.TenDonVi)
+        </dd>
+        @if (ViewBag.CanDelete != null && ViewBag.CanDelete == false)
+        {
+            <p class="text-danger">This unit cannot be deleted as it is currently associated with one or more services or products.</p>
+        }
+        else
+        {
+            using (Html.BeginForm())
+            {
+                @Html.AntiForgeryToken()
+
+                <div class="form-actions no-color">
+                    <input type="submit" value="Delete" class="btn btn-default btn-danger" /> |
+                    @Html.ActionLink("Back to List", "Index")
+                </div>
+            }
+        }
+</div>

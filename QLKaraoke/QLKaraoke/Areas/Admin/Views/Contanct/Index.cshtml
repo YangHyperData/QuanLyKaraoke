@@ -1,0 +1,105 @@
+﻿@using System.Web;
+@using System.Web.Mvc;
+@using PagedList.Mvc;
+@model PagedList.PagedList<QLKaraoke.Models.LienHe>
+@{
+    ViewBag.Title = "Index";
+    Layout = "~/Areas/Admin/Views/Shared/_LayoutAdmin.cshtml";
+}
+<div class="pagetitle">
+    <nav>
+        <ol class="breadcrumb">
+            <li class="breadcrumb-item"><a href="/admin/home/index">Home</a></li>
+            <li class="breadcrumb-item">Contanct</li>
+            <li class="breadcrumb-item active">Index</li>
+        </ol>
+    </nav>
+</div>
+
+@using (Html.BeginForm("Index", "Contanct", FormMethod.Get))
+{
+    <div class="row justify-content-between">
+        <div class="col-md-4">
+            <div class="form-group">
+                <div class="input-group">
+
+                    <input type="date" name="ngaytao" class="form-control form-control-sm datepicker" id="datepicker" value="@ViewBag.NgayTao" />
+                    <div class="input-group-append">
+                        <button type="submit" class="btn btn-sm btn-primary">
+                            <i class="fa fa-search"></i>
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <script>
+        $(function () {
+            $('.datepicker').datepicker({
+                dateFormat: "yy/mm/dd",
+                autoclose: true,
+            }).on('changeDate', function () {
+                $(this)..trigger('change');
+            });
+        });
+    </script>
+}
+<div class="container-fluid">
+
+    <div class="table-responsive">
+        <table class="table table-bordered table-hover">
+            <thead class="thead-dark">
+                <tr>
+                    <th>STT </th>
+                    <th>Tên Khách Hàng</th>
+                    <th>Nội Dung</th>
+                    <th>Số Điện Thoại</th>
+                    <th>Email</th>
+                    <th>Ngày Liên Hệ</th>
+
+                    <th class="text-center">Actions</th>
+                </tr>
+            </thead>
+            <tbody>
+                @{int stt = 1;}
+                @foreach (var item in Model)
+                {
+                    <tr>
+                        <td>@(stt++)</td>
+                        <td>@Html.DisplayFor(modelItem => item.TenKH)</td>
+                        <td>
+                            @Html.Raw(item.NoiDung.Substring(0, Math.Min(item.NoiDung.Length, 50)))@(item.NoiDung.Length > 50 ? "..." : "")
+                        </td>
+                        <td>@Html.DisplayFor(modelItem => item.SDT)</td>
+                        <td>@Html.DisplayFor(modelItem => item.Email)</td>
+                        <td>@item.NgayLH.ToString("dd/MM/yyyy")</td>
+                        <td class="text-center">
+
+                            @if (item.TrangThai == 1)
+                            {
+
+                                <a href="@Url.Action("Status","Contanct",new {@id=item.Id}) " class="btn btn-sm btn-success">On</a>
+                            }
+                            else
+                            {
+                                <a href="@Url.Action("Status","Contanct",new {@id=item.Id}) " class="btn btn-sm btn-danger">Off</a>
+
+                            }
+
+
+                        <a href="@Url.Action("Details", "Contanct", new { @id = item.Id })" class="btn btn-sm btn-warning">   <i class="fa fa-eye"></i> </a>
+                        <a href="@Url.Action("Delete", "Contanct", new { @id = item.Id })" class="btn btn-sm btn-danger"> <i class="fas fa-trash-alt"></i></a>
+                        </td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+    </div>
+</div>
+<div class="product__pagination">
+    Trang @(Model.PageCount < Model.PageNumber ? 0 : Model.PageNumber)/@Model.PageCount
+    <div class="MenuTrang">
+        @Html.PagedListPager(Model, page => Url.Action("Index", new { page = page }))
+    </div>
+
+</div>

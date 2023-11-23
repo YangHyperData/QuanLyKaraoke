@@ -1,0 +1,104 @@
+﻿@model QLKaraoke.Models.TinTuc
+
+@{
+    ViewBag.Title = "Details";
+    Layout = "~/Areas/Admin/Views/Shared/_LayoutAdmin.cshtml";
+}
+
+
+
+<div>
+    @if (Model.TrangThaiTin == 1)
+    {
+        <h4>Tin Tức</h4>
+    }
+    else
+    { <h4>Tuyển Dụng</h4>
+    }
+    <hr />
+    <div class="row">
+        <div class="col-md-6">
+       
+            <dl class="dl-horizontal">
+                <dt>
+                    Hình Ảnh
+                </dt>
+
+                <dd class="col-sm-9">
+                    @if (!string.IsNullOrEmpty(Model.Hinhanh))
+                    {
+                        <img src="@Url.Content("~/Areas/Admin/assets/img/" + Model.Hinhanh)" class="img-thumbnail" />
+                    }
+                    else
+                    {
+                        <p>No image available</p>
+                    }
+                </dd>
+
+                <dt>
+                    Tiêu Đề
+                </dt>
+
+                <div class="form-group">
+
+                    <p>@Html.Raw(@Model.TieuDe)</p>
+                </div>
+
+
+                <dt>
+                    Nội Dung
+                </dt>
+
+                <div class="form-group">
+
+                    <p>@Html.Raw(@Model.NoiDung)</p>
+                </div>
+                @if (Model.TrangThaiTin == 2)
+                {
+                    <dt>
+                        Chức Vụ
+                    </dt>
+
+                    <dd>
+                        @Html.DisplayFor(model => model.ChucVu.TenChucVu)
+                    </dd>
+                    <dt>
+                        Số lượng tuyển dụng
+                    </dt>
+
+                    <dd>
+                        @Html.DisplayFor(model => model.Soluong)
+                    </dd>
+                    <dt>
+                        Lương Chức Vụ
+                    </dt>
+
+                    <dd>
+                        @string.Format("{0:0,0} đ", Model.ChucVu.LuongCV)
+                    </dd>
+
+                    <dt>
+                        Lương Cơ Bản
+                    </dt>
+
+                    <dd>
+                        @string.Format("{0:0,0} đ", Model.Luong)
+                    </dd>
+
+
+                }
+            </dl>
+        </div>
+    </div>
+</div>
+
+<div class="text-center">
+    @if (Model.TrangThaiTin == 1)
+    {
+        @Html.ActionLink("Hoàn Tất", "Index")
+    }
+    else if (Model.TrangThaiTin == 2 )
+    {
+        @Html.ActionLink("Hoàn Tất", "Index1")
+    }
+</div>

@@ -1,0 +1,169 @@
+﻿@using System.Web;
+@using System.Web.Mvc;
+@using PagedList.Mvc;
+@model PagedList.PagedList<QLKaraoke.Models.Phong>
+
+@{
+    ViewBag.Title = "Danh sách phòng";
+    Layout = "~/Areas/Admin/Views/Shared/_LayoutAdmin.cshtml";
+}
+<div class="pagetitle">
+    <nav>
+        <ol class="breadcrumb">
+            <li class="breadcrumb-item"><a href="/admin/home/index">Home</a></li>
+            <li class="breadcrumb-item">Room</li>
+            <li class="breadcrumb-item active">Index</li>
+        </ol>
+    </nav>
+</div>
+@using (Html.BeginForm("Index", "Room", FormMethod.Get))
+{
+   <div class="row justify-content-between">
+       <div class="col-md-3">
+           <div class="form-group">
+               <div class="input-group">
+                   <a href="@Url.Action("Create")" class="btn btn-sm btn-success"><i class="fa fa-plus"></i> </a>
+               </div>
+           </div>
+       </div>
+       <div class="col-md-3">
+           <div class="form-group">
+               
+                   @Html.Label("Trạng Thái:", new { @class = "col-form-label" })
+                   @Html.DropDownList("trangThai", new SelectList(new List<SelectListItem>
+                       {
+                           new SelectListItem { Text = "Tất cả", Value = "" },
+                           new SelectListItem { Text = "Hoạt động", Value = "True" },
+                           new SelectListItem { Text = "Bảo trì", Value = "False" }
+                       }, "Value", "Text"), new { @class = "form-control form-control-sm", onchange = "this.form.submit();" })
+               </div>
+          
+       </div>
+       <div class="col-md-3">
+           <div class="form-group">
+               @Html.Label("Loại phòng:", new { @class = "col-form-label" })
+               @Html.DropDownList("IdLoai", ViewBag.idLoaiPhong as SelectList, "Chọn loại phòng", new { @class = "form-control" })
+           </div>
+       </div>
+       <div class="col-md-3">
+           <div class="form-group">
+               @Html.Label("Phòng:", new { @class = "col-form-label" })
+               @Html.DropDownList("IdPhong", ViewBag.idPhong as SelectList, "Chọn phòng", new { @class = "form-control", onchange = "this.form.submit();" })
+           </div>
+       </div>
+   </div>
+}
+
+        <script>
+                $(function () {
+                     // Lấy dropdownlist loại phòng
+                    var ddlLoaiPhong = $('#IdLoai');
+
+                    // Lấy dropdownlist tên phòng
+                    var ddlTenPhong = $('#IdPhong');
+                    $('#trangThai').on('change', function () {
+
+                        var trangThai = $(this).val();
+
+
+                        if (trangThai === '') {
+
+                            ddlLoaiPhong.val('');
+                            ddlTenPhong.val('');
+                        }
+                        $('form').submit();
+                    });
+                    // Bắt sự kiện onchange của dropdownlist loại phòng
+                    ddlLoaiPhong.on('change', function () {
+                        // Lấy giá trị được chọn trong dropdownlist loại phòng
+                    var idLoaiPhong = ddlLoaiPhong.val();
+
+                     // Nếu giá trị được chọn hợp lệ
+                    if (idLoaiPhong !== '') {
+                            // Gọi API để lấy danh sách các phòng tương ứng với loại phòng được chọn
+                    var url = '@Url.Action("GetRoomsByType", "Room")';
+                    $.getJSON(url, { IdLoai: idLoaiPhong }, function (data) {
+                                // Gán danh sách các phòng vào dropdownlist tên phòng
+                    ddlTenPhong.empty();
+                    ddlTenPhong.append($('<option>').val('').text('-- Chọn phòng --'));
+                     $.each(data, function (i, room) {
+                     ddlTenPhong.append($('<option>').val(room.value).text(room.text));
+                });
+            });
+        }
+        else {
+            // Nếu giá trị không hợp lệ, đặt giá trị của dropdownlist tên phòng thành rỗng
+            ddlTenPhong.empty();
+            ddlTenPhong.append($('<option>').val('').text('-- Chọn phòng --'));
+        }
+    });
+                });
+
+        </script>
+
+        <div class="panel">
+            <div class="panel-body">
+                <div class="table-responsive">
+                    <table class="table table-striped">
+
+                        <thead>
+                            <tr>
+                                <th>STT</th>
+                                <th>Tên phòng</th>
+                                <th>Đơn giá</th>
+                                <th>Trạng thái</th>
+                                <th>Số lượng người</th>
+                                <th>Hình ảnh</th>
+                                <th>Nội dung</th>
+                                <th>Loại phòng</th>
+
+                                <th>Actions</th>
+                            </tr>
+                        </thead>
+                        @{int stt = 1;}
+                        <tbody>
+                            @foreach (var item in Model)
+                            {
+                                <tr>
+
+                                    <td>@(stt++)</td>
+                                    <td>@Html.DisplayFor(modelItem => item.TenPhong)</td>
+
+                                    <td>@string.Format("{0:0,0} đ", item.DonGia)</td>
+                                    <td style="color: @(item.TrangThai.HasValue ? (item.TrangThai.Value ? "green" : "red") : "")">
+                                        @(item.TrangThai.HasValue ? (item.TrangThai.Value ? "Hoạt động" : "Bảo trì") : "")
+                                    </td>
+
+                                    <td>@Html.DisplayFor(modelItem => item.SoLuongNguoi)</td>
+
+                                    <td>
+                                        @if (!string.IsNullOrEmpty(item.HinhAnh))
+                                        {
+                                            <img src="@Url.Content("~/Areas/Admin/assets/img/" + item.HinhAnh)" alt="@item.TenPhong" width="100" height="100" />
+                                        }
+                                    </td>
+                                    <td>@Html.Raw(item.NoiDung.Length > 20 ? item.NoiDung.Substring(0, 10) + "..." : item.NoiDung)</td>
+
+
+                                    <td>@Html.DisplayFor(modelItem => item.LoaiPhong.TenPhong)</td>
+                                    <td class="text-center">
+
+                                        <a href="@Url.Action("Edit", new { id = item.IDPhong })" class="btn btn-sm btn-info"><i class="fas fa-pencil-alt"></i></a>
+                                        <a href="@Url.Action("Details", new { id = item.IDPhong })" class="btn btn-sm btn-success"><i class="far fa-eye"></i></a>
+
+                                        <a href="@Url.Action("Delete", new { id = item.IDPhong })" class="btn btn-sm btn-danger"><i class="fa fa-trash"></i> </a>
+                                    </td>
+                                </tr>
+                            }
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+        <div class="product__pagination">
+            Trang @(Model.PageCount < Model.PageNumber ? 0 : Model.PageNumber)/@Model.PageCount
+            <div class="MenuTrang">
+                @Html.PagedListPager(Model, page => Url.Action("Index", new { page = page }))
+            </div>
+
+        </div>

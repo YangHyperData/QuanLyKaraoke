@@ -1,0 +1,273 @@
+﻿
+@using QLKaraoke.Models;
+@model List<QLKaraoke.Models.SuDungDichVu>
+@{
+    ViewBag.Title = "Cart";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+@{ List<SuDungDichVu> lis = (List<SuDungDichVu>)Session["SuDungDichVu"];
+    int cnt = lis.Count();
+}
+<style>
+    .shopping-cart {
+        padding: 50px 0;
+    }
+
+
+
+    .shopping-cart-table table {
+        width: 100%;
+        border-collapse: collapse;
+    }
+
+    .shopping-cart-table thead th {
+        text-transform: uppercase;
+        font-size: 14px;
+        font-weight: 700;
+        color: #333;
+        background-color: #f8f8f8;
+        border-bottom: 1px solid #ddd;
+        padding: 15px;
+        text-align: left;
+    }
+
+    .shopping-cart-table tbody td {
+        vertical-align: middle;
+        border-bottom: 1px solid #ddd;
+        padding: 15px;
+        text-align: left;
+    }
+
+        .shopping-cart-table tbody td.shopping-cart-item {
+            width: 40%;
+        }
+
+        .shopping-cart-table tbody td.shopping-cart-price,
+        .shopping-cart-table tbody td.shopping-cart-quantity,
+        .shopping-cart-table tbody td.shopping-cart-total {
+            width: 20%;
+            text-align: center;
+        }
+
+        .shopping-cart-table tbody td.shopping-cart-total {
+            font-weight: 700;
+        }
+
+        .shopping-cart-table tbody td.shopping-cart-item-close {
+            width: 10%;
+        }
+
+            .shopping-cart-table tbody td.shopping-cart-item-close a {
+                font-size: 14px;
+            }
+
+    .shopping-cart-buttons {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+    }
+
+    .primary-btn.cart-btn {
+        background-color: #f4ff94;
+        color: #333;
+        border: none;
+        padding: 10px 25px;
+        font-size: 14px;
+        font-weight: 700;
+        text-transform: uppercase;
+        border-radius: 30px;
+        transition: all 0.3s;
+    }
+
+        .primary-btn.cart-btn:hover {
+            background-color: #333;
+            color: #fff;
+            cursor: pointer;
+        }
+
+        .primary-btn.cart-btn.cart-btn-right {
+            margin-left: auto;
+        }
+
+    .shopping-cart-total-label {
+        font-size: 16px;
+        font-weight: 700;
+    }
+
+    .shopping-cart-total-header {
+        margin-bottom: 5px;
+    }
+
+    .shopping-cart-total-value {
+        font-size: 18px;
+        font-weight: 700;
+        color: #f44336;
+    }
+
+    .shopping-cart-table {
+        border-collapse: collapse;
+        width: 100%;
+        margin-top: 20px;
+    }
+
+        .shopping-cart-table td, .shopping-cart-table th {
+            border: 1px solid #ddd;
+            padding: 8px;
+            text-align: center;
+            vertical-align: middle;
+        }
+
+        .shopping-cart-table th {
+            background-color: #f2f2f2;
+            color: #333;
+        }
+
+    .shopping-cart-item-close {
+        text-align: center;
+    }
+
+        .shopping-cart-item-close a {
+            color: red;
+        }
+
+    .shopping-cart-quantity {
+        width: 120px;
+    }
+
+    .pro-qty {
+        display: inline-flex;
+        width: 100%;
+        justify-content: center;
+        align-items: center;
+        height: 50px;
+        position: relative;
+    }
+
+    .quantity-control {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        position: relative;
+        height: 35px;
+        font-size: 16px;
+        width: 100%;
+    }
+
+    .quantity-button {
+        height: 35px;
+        width: 35px;
+        font-size: 16px;
+        text-align: center;
+        background-color: #f4ff94;
+        border: none;
+        padding: 0px;
+    }
+
+    .quantity-value {
+        height: 35px;
+        width: 50px;
+        font-size: 16px;
+        text-align: center;
+        border: none;
+        border-radius: 0px;
+        padding: 0px;
+        margin: 0px;
+    }
+</style>
+@Html.ValidationSummary(true, "", new { @class = "text-danger" })
+@if (TempData["ErrorMessage"] != null)
+{
+    <div style="background-color: red; color: white; font-weight: bold;">
+        @TempData["ErrorMessage"]
+    </div>
+}
+
+@if (cnt != 0)
+{
+    <section class="shopping-cart spad">
+        <div class="container">
+            <div class="row">
+                <div class="col-lg-12">
+                    <div class="shopping-cart-table">
+                        <table>
+                            <thead>
+                                <tr>
+                                    <th class="shopping-cart-product">Tên Dịch Vụ</th>
+                                    <th class="shopping-cart-price">Giá</th>
+                                    <th class="shopping-cart-quantity">Số Lượng</th>
+                                    <th class="shopping-cart-total">Đơn Giá</th>
+                                    <th></th>
+                                    <th></th>
+                                </tr>
+                            </thead>
+
+                            @foreach (var item in Model)
+                            {
+                                <tbody>
+                                    <tr>
+                                        <td class="shopping-cart-item">@item.Ten</td>
+                                        @using (Html.BeginForm("UpdateCart", "UseService", new { iProductID = item.IDDv }))
+                                        {
+                                            <td class="shopping-cart-price text-center">@string.Format("{0:0,0} đ", item.Gia)</td>
+                                            <td class="shopping-cart-quantity text-center">
+                                                <div class="quantity d-flex align-items-center justify-content-center">
+                                                    <div class="pro-qty quantity-control">
+                                                        <button type="button" class="quantity-button minus" onclick="decreaseQuantity(this)">-</button>
+                                                        <input min="1" name="SoLuong" value="@item.SoLuong" style="background-color:#f4ff94" class="quantity-value" />
+                                                        <button type="button" class="quantity-button plus" onclick="increaseQuantity(this)">+</button>
+                                                    </div>
+                                                </div>
+                                                <script>
+                                                    function increaseQuantity(button) {
+                                                        var input = button.previousElementSibling;
+                                                        var value = parseInt(input.value);
+                                                        input.value = value + 1;
+                                                    }
+
+                                                    function decreaseQuantity(button) {
+                                                        var input = button.nextElementSibling;
+                                                        var value = parseInt(input.value);
+                                                        if (value > 1) {
+                                                            input.value = value - 1;
+                                                        }
+                                                    }
+                                                </script>
+                                            </td>
+
+                                            <td class="shopping-cart-total">@string.Format("{0:0,0} đ", item.Gia * item.SoLuong)</td>
+                                            <td class="shopping-cart-item">
+                                                @Html.ActionLink("Remove", "DeleteCart", new { iProductID = item.IDDv }, new { @class = "btn btn-danger" })
+                                            </td>
+                                            <td><input type="submit" value="Update" class="btn btn-success" /></td>
+                                        }
+                                    </tr>
+                                </tbody>
+                            }
+                            <tfoot>
+                                <tr>
+                                    <td colspan="4" class="shopping-cart-total-label">
+                                        <h4 class="shopping-cart-total-header">Tổng cộng:</h4>
+                                    </td>
+                                    <td class="shopping-cart-total-value">@string.Format("{0:0,0} đ", @ViewBag.Total)</td>
+                                    <td></td>
+                                </tr>
+                            </tfoot>
+                        </table>
+                    </div>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-lg-12">
+                    <div class="shopping-cart-buttons">
+                        <a href="@Url.Action("Services","Home")" class="primary-btn cart-btn">Tiếp tục chọn</a>
+                        <a href="@Url.Action("Order","UseService")" class="primary-btn cart-btn cart-btn-right checkout-btn">Đặt dịch vụ</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+}
+else
+{
+    <p class="empty-cart-message">Không có sản phẩm trong giỏ hàng</p>
+}

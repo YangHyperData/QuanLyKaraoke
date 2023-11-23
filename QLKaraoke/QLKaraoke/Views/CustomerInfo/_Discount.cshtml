@@ -1,0 +1,46 @@
+﻿@using QLKaraoke.Models
+@using System.Data.Entity;
+@{
+    QLKARAOKEEntities db = new QLKARAOKEEntities();
+    KhachHangg cust = (KhachHangg)Session["CInfo"];
+    int ID = Convert.ToInt32(cust.ID.ToString());
+    var dis = db.GiammGias.Include(n => n.DatPhongs).Include(n => n.KhachHangg)
+    .Where(n => (n.TrangThai == false && n.Idk == ID && n.Soluong > 0) || (n.TrangThai == true && n.Soluong > 0))
+    .ToList();
+}
+@if (dis.Count == 0)
+{
+    <text>
+        <h2 class="text-black-50 font-weight-bold text-center p-3">Mã giảm giá</h2>
+    </text>
+}
+else
+{
+    <text>
+        <div>
+            <table class="table table-striped">
+                <tr>
+                    <th>
+                        Mã 
+                    </th>
+                    <th>
+                        Số Tiền
+                    </th>
+                   
+                </tr>
+
+                @foreach (var item in dis)
+                {
+                    <tr>
+                        <td>
+                            @item.code
+                        </td>
+                        <td>@string.Format("{0:0,0} đ", item.SoTien)</td>
+
+                    </tr>
+                }
+            </table>
+        </div>
+    </text>
+}
+

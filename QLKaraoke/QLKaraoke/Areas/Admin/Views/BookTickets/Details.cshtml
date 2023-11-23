@@ -1,0 +1,94 @@
+﻿@model QLKaraoke.Models.DatPhong
+
+@{
+    ViewBag.Title = "Detail";
+    Layout = "~/Areas/Admin/Views/Shared/_LayoutAdmin.cshtml";
+}
+
+
+@if (ViewBag.Message != null)
+{
+    <div class="alert alert-danger">@ViewBag.Message</div>
+}
+<div class="container">
+    <div class="row">
+        <div class="col-md-12">
+            <h4 class="text-center mb-4">Thông tin đặt phòng</h4>
+
+            <hr />
+            <dl class="row">
+                <dt class="col-sm-4">Thời Gian:</dt>
+                <dd class="col-sm-8">@Html.DisplayFor(model => model.TimeStar)-@Html.DisplayFor(model => model.TimeEnd)</dd>
+                <dt class="col-sm-4">Ngày Hát:</dt>
+                <dd class="col-sm-8">@Model.Ngay.Value.ToString("dd/MM/yyyy")</dd>
+
+                <dt class="col-sm-4">Trạng Thái:</dt>
+                <dd class="col-sm-8">
+                    @if (Model.TrangThai == 1)
+                    {
+                        <p class="text-success">Tiếp nhận thanh toán</p>
+                    }
+                    else
+                    {
+                        <p class="text-danger">Chưa nhận thanh toán</p>
+                    }
+                </dd>
+
+                <dt class="col-sm-4">Tên Khách Hàng:</dt>
+                <dd class="col-sm-8">@Html.DisplayFor(model => model.KhachHangg.Name)</dd>
+
+                <dt class="col-sm-4">Số Điện Thoại:</dt>
+                <dd class="col-sm-8">@Html.DisplayFor(model => model.Sdt)</dd>
+
+                <dt class="col-sm-4">Email:</dt>
+                <dd class="col-sm-8">@Html.DisplayFor(model => model.Email)</dd>
+                <dt class="col-sm-4">Tên Phòng:</dt>
+                <dd class="col-sm-8">@Html.DisplayFor(model => model.TenPhong)</dd>
+                <dt class="col-sm-4">Loại Phòng:</dt>
+                <dd class="col-sm-8">@Html.DisplayFor(model => model.LoaiP)</dd>
+                <dt class="col-sm-4">Mã Đặt:</dt>
+                <dd class="col-sm-8">@Html.DisplayFor(model => model.MaDat)</dd>
+                <dt class="col-sm-4">Giờ Sử Dụng:</dt>
+                <dd class="col-sm-8">@String.Format("{0:0.00}", (Model.TimeEnd.Value - Model.TimeStar.Value).TotalHours)</dd>
+
+                <dt class="col-sm-4">Giá Loại Phòng:</dt>
+                <dd class="col-sm-8"> @string.Format("{0:0,0} đ", Model.LoaiPhong.DonGia)</dd>
+                <dt class="col-sm-4">Giá Phòng @String.Format("{0:0.00}", (Model.TimeEnd.Value - Model.TimeStar.Value).TotalHours) Giờ:</dt>
+                <dd class="col-sm-8"> @string.Format("{0:0,0} đ", Model.Phong.DonGia * (Model.TimeEnd.Value - Model.TimeStar.Value).TotalHours) </dd>
+                <dt class="col-sm-4">Tổng Gía phòng:</dt>
+                <dd class="col-sm-8"> @string.Format("{0:0,0} đ", Model.Tienlich)</dd>
+                @if (Model.TienGiamGia > 0)
+                {
+                    <dt class="col-sm-4">Tiền Giảm Giá:</dt>
+                    <dd class="col-sm-8"> @string.Format("{0:0,0} đ", Model.TienGiamGia)</dd>
+                }
+
+
+                <dt class="col-sm-4">Tiền Dịch Vụ:</dt>
+                <dd class="col-sm-8"> @string.Format("{0:0,0} đ", Model.TienDichVu)</dd>
+
+                <dt class="col-sm-4">Thành Tiền:</dt>
+                <dd class="col-sm-8"> @string.Format("{0:0,0} đ", Model.ThanhTien)</dd>
+            </dl>
+        </div>
+    </div>
+    <div class="row justify-content-center">
+        @using (Html.BeginForm("Details", "BookTickets", FormMethod.Post))
+        {
+            @Html.AntiForgeryToken()
+
+
+<div class="col-sm-6">
+    <div class="text-center">
+        @if (Model.TrangThai == 1) { }
+        else
+        {
+            <input type="submit" value="Tiếp nhận thanh toán" class="btn btn-primary" />
+        }
+
+        <a href="@Url.Action("Index1")" class="btn btn-danger ml-4">Hủy</a>
+    </div>
+            </div>
+        }
+    </div>
+</div>

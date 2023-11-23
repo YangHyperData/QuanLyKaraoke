@@ -1,0 +1,77 @@
+﻿@model QLKaraoke.Models.DichVu1
+
+@{
+    ViewBag.Title = "Create";
+    Layout = "~/Areas/Admin/Views/Shared/_LayoutAdmin.cshtml";
+}
+
+
+
+@using (Html.BeginForm("Create", "Service", FormMethod.Post, new { enctype = "multipart/form-data", @class = "form-horizontal", role = "form" }))
+{
+    @Html.AntiForgeryToken()
+
+    <div class="form-group">
+        @Html.LabelFor(model => model.IDKhoHang, "Tên Mặt Hàng:", htmlAttributes: new { @class = "control-label col-md-2" })
+        <div class="col-md-10">
+            @Html.DropDownListFor(model => model.IDKhoHang, ViewBag.IDKhoHang as SelectList, "-- Select Kho Hang --", new { @class = "form-control" })
+            @Html.ValidationMessageFor(model => model.IDKhoHang, "", new { @class = "text-danger" })
+            @if (TempData["Er1"] != null)
+            {
+                <p class="text-danger">@TempData["Er1"]</p>
+            }
+        </div>
+    </div>
+
+    <div class="form-group">
+        <div class="col-md-10">
+            @Html.TextAreaFor(model => model.MoTa, new { htmlAttributes = new { @class = "form-control", @id = "MoTa" } })
+            @Html.ValidationMessageFor(model => model.MoTa, "", new { @class = "text-danger" })
+        </div>
+        </div>
+        <script>
+            CKEDITOR.replace('MoTa');
+        </script>
+
+        <div class="form-group">
+            @Html.LabelFor(model => model.SoLuong, "Số Lượng", htmlAttributes: new { @class = "control-label col-md-2" })
+            <div class="col-md-10">
+                @Html.EditorFor(model => model.SoLuong, new { htmlAttributes = new { @class = "form-control", @required = "required" } })
+                @Html.ValidationMessageFor(model => model.SoLuong, "", new { @class = "text-danger" })
+
+                @if (TempData["Er"] != null)
+                {
+                    <p class="text-danger">@TempData["Er"]</p>
+                }
+            </div>
+        </div>
+
+        <div class="form-group">
+            @Html.LabelFor(model => model.GiaBan, "Tiền Lời", htmlAttributes: new { @class = "control-label col-md-2" })
+            <div class="col-md-10">
+                @Html.TextBoxFor(model => model.GiaBan, new { @class = "form-control" })
+                @Html.ValidationMessageFor(model => model.GiaBan, "", new { @class = "text-danger" })
+            </div>
+        </div>
+
+        <div class="form-group">
+            @Html.LabelFor(model => model.HinhAnh, "Hình Ảnh", htmlAttributes: new { @class = "control-label col-md-2" })
+            <div class="col-md-10">
+                <input type="file" name="HinhAnh" />
+                @Html.ValidationMessageFor(model => model.HinhAnh, "", new { @class = "text-danger" })
+            </div>
+        </div>
+        <div class="form-group">
+
+        </div>
+        <div class="form-group">
+            <div class="col-md-offset-2 col-md-10">
+                <input type="submit" value="Thêm" class="btn btn-default btn-success" />
+                <a href="@Url.Action("Index")" class="btn btn-danger">Hủy</a>
+            </div>
+        </div>
+        }
+
+        @section Scripts {
+            @Scripts.Render("~/bundles/jqueryval")
+        }

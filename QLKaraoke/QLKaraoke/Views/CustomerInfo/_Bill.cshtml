@@ -1,0 +1,85 @@
+﻿@using QLKaraoke.Models
+@using System.Data.Entity;
+@{
+    QLKARAOKEEntities db = new QLKARAOKEEntities();
+    KhachHangg cust = (KhachHangg)Session["CInfo"];
+    int ID = Convert.ToInt32(cust.ID.ToString());
+    var bill = db.HOADONs.Include(d => d.DatPhong.KhachHangg).Include(d => d.DatPhong)
+    .Where(n => (n.DatPhong.IdKH == ID&&n.TrangThai==true)).ToList();
+}
+@if (bill.Count == 0)
+{
+    <text>
+        <h2 class="text-black-50 font-weight-bold text-center p-3">Hóa Đơn</h2>
+    </text>
+}
+else
+{
+    <text>
+        <div>
+            <table class="table table-striped">
+                    <tr>
+                        <th>
+                            Mã
+                        </th>
+                        <th>
+                            Giờ
+                        </th>
+                        <th>
+                            Ngày
+                        </th>
+
+                        <th>
+                            Tiền Thêm
+                        </th>
+                        <th>
+                            Tiền Giảm
+                        </th>
+                        <th>
+                            Tổng Tiền
+                        </th>
+                    </tr>
+
+                @foreach (var item in bill)
+                {
+                    <tr>
+                        <td>
+                            @item.DatPhong.MaDat
+                        </td>
+                        <td>
+                            @item.ThoiGianBatDau-@item.ThoiGianKetThuc
+                        </td>
+                        <td>
+                            @item.Ngay.Value.ToString("dd/MM/yyyy")
+                        </td>
+
+                        @if (item.TienThem > 0)
+                        {
+                            <td>
+                                @string.Format("{0:0,0} đ", item.TienThem)
+                            </td>
+                        }
+                        else
+                        {
+                            <td>0đ</td>
+}
+
+
+                        @if (item.TienGiam > 0)
+                        {
+                            <td>
+                                @string.Format("{0:0,0} đ", item.TienGiam)
+                            </td>
+                        }
+                        else { <td>0đ</td>}
+                        <td>@string.Format("{0:0,0} đ", item.ThanhTien)</td>
+
+                    </tr>
+                }
+            </table>
+        </div>
+    </text>
+}
+
+
+

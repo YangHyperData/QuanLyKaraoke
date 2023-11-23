@@ -1,0 +1,156 @@
+﻿@using System.Web;
+@using System.Web.Mvc;
+@using PagedList.Mvc;
+@model PagedList.PagedList<QLKaraoke.Models.QuanLii>
+
+@{
+    ViewBag.Title = "Index";
+    Layout = "~/Areas/Admin/Views/Shared/_LayoutAdmin.cshtml";
+}
+<div class="pagetitle">
+    <nav>
+        <ol class="breadcrumb">
+            <li class="breadcrumb-item"><a href="/admin/home/index">Home</a></li>
+            <li class="breadcrumb-item">Customer</li>
+            <li class="breadcrumb-item active">Index</li>
+        </ol>
+    </nav>
+</div>
+@using (Html.BeginForm("Index", "Ad", FormMethod.Get))
+{
+    <div class="row justify-content-between">
+        <div class="col-md-4">
+            <div class="form-group">
+                <div class="input-group">
+                    <a href="@Url.Action("Create")" class="btn btn-sm btn-success"><i class="fa fa-plus"></i> </a>
+                    <select name="searchType" id="searchType" class="form-control form-control-sm">
+
+                        <option value="Email">Tìm kiếm theo email</option>
+                        <option value="Ten">Tìm kiếm theo tên</option>
+                        <option value="Sdt">Tìm kiếm theo số điện thoại</option>
+                    </select>
+
+                    <input type="text" name="Email" class="form-control form-control-sm" placeholder="Nhập Email" style="display:none" />
+                    <input type="text" name="ten" class="form-control form-control-sm" placeholder="Nhập tên" style="display:none" />
+                    <input type="text" name="sdt" class="form-control form-control-sm" placeholder="Nhập số điện thoại" style="display:none;" />
+                    <div class="input-group-append">
+                        <button type="submit" class="btn btn-sm btn-primary">
+                            <i class="fa fa-search"></i>
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <script>
+        $(function () {
+
+            $('#searchType').change(function () {
+                var selectedValue = $(this).val();
+                if (selectedValue == 'Email') {
+                    $('input[name="Email"]').show();
+
+                    $('input[name="ten"]').hide();
+                    $('input[name="sdt"]').hide();
+                }
+                else if (selectedValue == 'Ten') {
+                    $('input[name="ngaytao"]').hide();
+
+                    $('input[name="ten"]').show();
+                    $('input[name="sdt"]').hide();
+                }
+                else {
+                    $('input[name="ngaytao"]').hide();
+
+                    $('input[name="ten"]').hide();
+                    $('input[name="sdt"]').show();
+                }
+            });
+        });
+    </script>
+}
+<table class="table">
+    <thead>
+        <tr>
+            <th>STT</th>
+            <th>Tên</th>
+            <th>Giới Tính</th>
+            <th>Số ĐT</th>
+            <th>Email</th>
+            <th>Chức Vụ</th>
+
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var item in Model.Select((value, index) => new { index = index + 1, value }))
+        {
+            <tr>
+                <td>@item.index</td>
+                <td>@item.value.Ten</td>
+                <td>@item.value.Gender</td>
+                <td>@item.value.Sdt</td>
+                <td>@item.value.Email</td>
+                <td>@item.value.ChucVu</td>
+                <td>
+
+
+
+                    <a href="@Url.Action("Delete", new { id = item.value.Id})" class="btn btn-danger btn-sm" onclick="return confirm('Bạn có chắc muốn xóa?');">
+                        <i class="fas fa-trash-alt"></i>
+                    </a>
+
+
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>
+<div class="product__pagination">
+    Trang @(Model.PageCount < Model.PageNumber ? 0 : Model.PageNumber)/@Model.PageCount
+    <div class="MenuTrang">
+        @Html.PagedListPager(Model, page => Url.Action("Index", new { page = page }))
+    </div>
+
+</div>
+<style>
+    table {
+        border-collapse: collapse;
+        width: 100%;
+    }
+
+    th, td {
+        text-align: left;
+        padding: 8px;
+        border: 1px solid #ddd;
+    }
+
+    th {
+        background-color: #ddd;
+    }
+
+    tr:nth-child(even) {
+        background-color: #f2f2f2;
+    }
+
+    .btn {
+        padding: 6px 12px;
+        border: none;
+        border-radius: 3px;
+        background-color: #007bff;
+        color: #fff;
+        text-decoration: none;
+    }
+
+        .btn:hover {
+            background-color: #0069d9;
+        }
+
+    .btn-danger {
+        background-color: #dc3545;
+    }
+
+        .btn-danger:hover {
+            background-color: #c82333;
+        }
+</style>

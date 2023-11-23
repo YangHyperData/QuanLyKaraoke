@@ -1,0 +1,48 @@
+﻿@model QLKaraoke.Models.DaysOfWeek
+
+@{
+    ViewBag.Title = "Edit Day of Week";
+    Layout = "~/Areas/Admin/Views/Shared/_LayoutAdmin.cshtml";
+}
+
+<div class="container">
+    <div class="row justify-content-center">
+        <div class="col-md-8">
+            <div class="card">
+                <div class="card-header">
+                    <h3 class="card-title">Edit Day of Week - @Model.Name</h3>
+                </div>
+                <div class="card-body">
+                    @using (Html.BeginForm())
+                    {
+                        @Html.AntiForgeryToken()
+                        @Html.HiddenFor(model => model.ID)
+
+                        <div class="form-group row">
+                            <label for="Gia" class="col-md-3 col-form-label text-md-right">Giá:</label>
+                            <div class="col-md-8">
+                                @Html.EditorFor(model => model.Gia, new { htmlAttributes = new { @class = "form-control", @id = "Gia" } })
+                                @Html.ValidationMessageFor(model => model.Gia, "", new { @class = "text-danger" })
+                            </div>
+                        </div>
+
+                        <div class="form-group row">
+                            <div class="col-md-8 offset-md-3">
+                                <button type="submit" class="btn btn-primary">
+                                    Lưu
+                                </button>
+                                <a href="@Url.Action("Index")" class="btn btn-secondary">
+                                   Quay Lại
+                                </a>
+                            </div>
+                        </div>
+                    }
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    @Scripts.Render("~/bundles/jqueryval")
+}
